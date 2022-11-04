@@ -47,7 +47,8 @@ using namespace std;
 
 //----------------------------------------------//
 //7. RadixSort
-int getMax(int a[], int n) {
+int getMax(int a[], int n) 
+{
 	int Max = a[0];
 
 	for (int i = 1; i < n; i++) {
@@ -77,7 +78,6 @@ void CountRadix(int a[], int n, int exp) {
 		a[i] = tmp[i];
 	}
 }
-
 
 void RadixSort(int a[], int n) {
 	int m = getMax(a, n);
@@ -128,9 +128,9 @@ void CountingSort(int arr[], int n)
 
 //----------------------------------------------//
 //11. FlashSort
-long long InsertionSort(int a[], int n)
+long long InsertionSort(int a[], int n, long long &nComp)
 {
-	long long nComp = 0;
+	nComp = 0;
 
 	for (int i = 1; ++nComp && i < n; ++i) {
 		int currentValue = a[i];
@@ -144,7 +144,7 @@ long long InsertionSort(int a[], int n)
 
 		a[j] = currentValue;
 	}
-
+	
 	return nComp;
 }
 
@@ -186,9 +186,13 @@ long long ClassPermute(int a[], int n, int minValue, int maxValue, int freq[], i
 long long ClassSort(int a[], int n, int freq[], int m)
 {
 	long long nComp = 0;
+	long long dummy = 0;
 	for (int k = 2; ++nComp && k <= m; ++k)
-		nComp += InsertionSort(a + freq[k - 1], freq[k] - freq[k - 1]);
-
+	{
+		InsertionSort(a + freq[k - 1], freq[k] - freq[k - 1], dummy);
+		nComp += dummy;
+	}
+		
 	return nComp;
 }
 
