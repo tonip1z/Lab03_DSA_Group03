@@ -9,9 +9,17 @@
 //1. SelectionSort
 void SelectionSort(int a[], int n, long long &num_Comp);
 
+//2. InsertionSort
+void InsertionSort(int a[], int n, long long &num_Comp);
+
 //3. BubbleSort
 void BubbleSort(int a[], int n, long long &num_Comp);
 void BubbleSort_with_flag(int a[], int n, long long &num_Comp);
+
+//4. HeapSort
+void HeapSort(int a[], int n, long long &num_Comp);
+void HeapConstruct(int a[], int n, long long &num_Comp);
+void HeapRebuild(int index, int a[], int n, long long &num_Comp);
 
 //5. MergeSort
 void MergeSort(int a[], int n, long long &num_Comp);
