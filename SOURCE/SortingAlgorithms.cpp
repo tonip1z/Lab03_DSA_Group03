@@ -23,7 +23,21 @@ using namespace std;
 //Implementation goes here, write code in corresponding section for each algorithm
 //----------------------------------------------//
 //1. SelectionSort
-
+void SelectionSort(int a[], int n) 
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        int k_min = i;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (a[k_min] > a[j])
+            {
+                k_min = j;
+                swap(a[i], a[k_min]);
+            }
+        }
+    }
+}
 
 //----------------------------------------------//
 //2. InsertionSort
@@ -31,6 +45,38 @@ using namespace std;
 
 //----------------------------------------------//
 //3. BubbleSort
+void BubbleSort(int a[], int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = n - 1; j > i; j--)
+        {
+            if (a[j] < a[j - 1])
+            {
+                swap(a[j], a[j - 1]);
+            }
+        }
+    }
+}
+
+void BubbleSort_with_flag(int a[], int n)
+{
+    int i = 0;
+    bool flag;
+    while (flag)
+    {
+        flag = false;
+        for (int j = n - 1; j > i; j--)
+        {
+            if (a[j] < a[j - 1])
+            {
+                swap(a[j], a[j - 1]);
+                flag = true;
+            }
+            i++;
+        }
+    }
+}
 
 
 //----------------------------------------------//
@@ -39,6 +85,65 @@ using namespace std;
 
 //----------------------------------------------//
 //5. MergeSort
+// Merge Sort with Recursion (using divide and conquer technique).
+// Basically, the sort itself means: Array(Unsorted) = Run1(Unsorted) + Run2(Unsorted) -> Run1(Sorted) + Run2(Sorted) = Array(Sorted) 
+// This is a flexible merge sort, can be used to sort all values in array a or part of it, just by changing the range p and q.
+
+//The arguments contain array a (unsorted), array temp to store the answer, begin, pivot, end (of the sorting range).
+// Using the pivot, array has splitted into two runs: the first half and the second half of the original array. 
+void MergeRun(int a[], int temp[], int p, int t, int q)     
+{
+    int m = 0;      // starting point of array temp
+    int n = t - 1;    //end point of the first run
+    int i = p;
+    int j = t;
+    
+    while ((i <= n) && (j <= q))
+    {
+        if(a[i] <= a[j])
+        {
+            temp[m] = a[i];
+            i++;
+        }
+        else
+        {
+            temp[m] = a[j];
+            j++;
+        }
+        m++;
+    }
+    
+    // Put the rest of the first run into array temp
+    for (int r = i; r <= n; r++)
+    {
+        temp[m] = a[r];
+        m++;
+    }
+    
+    // Put the rest of the second run into array temp
+    for (int r = j; r <= q; r++)
+    {
+        temp[m] = a[r];
+        m++;
+    }
+}
+
+void Sort_on_Run(int a[],int temp[],int p, int q)
+{
+    if (p < q)
+    {
+        int k = (p + q)/2; // Choosing pivot at the middle of array a
+        Sort_on_Run(a, temp, p, k);
+        Sort_on_Run(a, temp, k + 1, q);
+        MergeRun(a, temp, p, k + 1, q);
+    }
+}
+
+void MergeSort(int a[], int n)
+{
+    int* temp = new int[n];
+    Sort_on_Run(a, temp, 0, n - 1);
+}
 
 
 //----------------------------------------------//
@@ -47,54 +152,77 @@ using namespace std;
 
 //----------------------------------------------//
 //7. RadixSort
-int getMax(int a[], int n) 
+// Least Significant Decimal Radix Sort
+void RadixSort(int a[], int n)
 {
-	int Max = a[0];
+    const int base = 10;     // Number of "buckets" = 10
+    int bucket[base];
+    int* p = new int[n];
 
-	for (int i = 1; i < n; i++) {
-		if (a[i] > Max) Max = a[i];
-	}
-	return(Max);
+    int max = a[0];
+    for(int i = 1; i < n; i++)
+        if (a[i] > max)
+            max = a[i];
+    int weight = 1;
+    while(max/weight > 0)
+    {
+        // Create empty buckets (starting value of every bucket = 0) 
+        for(int i = 0; i < base; i++)
+            bucket[i] = 0;  // In here we use the 'bucket' array to count the number of values later on 
+        
+        // Count the number of values of each bucket, one by one
+        for(int i = 0; i < n; i++)
+            bucket[(a[i]/weight) % base]++;
+
+        // Count the number of values that have been listed in the buckets
+        for(int i = 0; i < base; i++)
+            bucket[i] = bucket[i] + bucket[i-1];
+
+        // Putting values into buckets (bucket[i] loops because bucket[i] = n, the number of values in array a.)
+        for(int i = n - 1; i >= 0; i--)
+        {
+            bucket[(a[i]/weight) % base]--;
+            p[bucket[(a[i]/weight) % base]] = a[i];
+        }
+        
+        // Return values in each bucket back to array a, one by one
+        for(int i = 0; i < n; i++)
+            a[i] = p[i];
+
+        weight  = weight * base; // Next weight 
+    }
 }
-
-void CountRadix(int a[], int n, int exp) {
-	int* tmp = new int[n];
-	int count[10] = { 0 };
-
-	for (int i = 0; i < n; i++) {
-		count[(a[i] / exp) % 10]++;
-	}
-
-	for (int i = 1; i < 10; i++) {
-		count[i] += count[i - 1];
-	}
-
-	for (int i = n - 1; i >= 0; i--) {
-		tmp[count[(a[i] / exp) % 10] - 1] = a[i];
-		count[(a[i] / exp) % 10]--;
-	}
-
-	for (int i = 0; i < n; i++) {
-		a[i] = tmp[i];
-	}
-}
-
-void RadixSort(int a[], int n) {
-	int m = getMax(a, n);
-	int i = 1;
-
-	while (m / i > 0) {
-		CountRadix(a, n, i);
-		i *= 10;
-	}
-}
-
 //----------------------------------------------//
 //8. ShakerSort
 
 
 //----------------------------------------------//
 //9. ShellSort
+void ShellSort(int a[],int n)
+{
+    int m = 3;
+    int h[] = {1, 3, 7};
+    for (int r = m - 1; r >= 0; r--)
+    {
+        int k = h[r];
+        for (int i = k; i < n; i++)
+        {
+            int x = a[i];
+            int j = i - k;
+            bool cont = true;
+            while ((j >= 0) && cont)
+            {
+                if (a[j] > x)
+                {
+                    a[j + k] = a[j];
+                    j = j - k;
+                }
+                else cont = false;
+                a[j + k] = x;
+            }
+        }
+    }
+}
 
 
 //----------------------------------------------//
