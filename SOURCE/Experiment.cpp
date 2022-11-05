@@ -53,7 +53,7 @@ void Experiment()
         //for each Data Order
         for (int DataOrder = 0; DataOrder < 4; DataOrder++)
         {
-            cout << "\nData order: " << getDataOrder(DataOrder) << "\n";
+            fout << "\nDATA ORDER: " << getDataOrder(DataOrder) << "\n";
             //for each Data Size
             for (int size_id = 0; size_id < 6; size_id++)
             {
@@ -61,7 +61,7 @@ void Experiment()
                 int* a = new int[DATA_SIZE[size_id]];
                 GenerateData(a, DATA_SIZE[size_id], DataOrder);
 
-                cout << "   Data size: " << DATA_SIZE[size_id] << "\n";
+                fout << "   DATA SIZE: " << DATA_SIZE[size_id] << "\n";
                 //every sorting algorithm uses the same data set
                 //for each sorting algorithm
                 for (int algo_id = 0; algo_id < 11; algo_id++)
@@ -71,9 +71,9 @@ void Experiment()
                     (*SORT_ALGO[algo_id])(a, DATA_SIZE[size_id], num_Comp);
                     end_time = clock();
 
-                    cout << "       Algorithm: " << getAlgoName(algo_id) << "\n";
-                    cout << "           Runtime (in millisecond): " << fixed << setprecision(6) << difftime(end_time, start_time) * 1000 << "\n";
-                    cout << "           Comparisons: " << num_Comp << "\n";
+                    fout << "       Algorithm: " << getAlgoName(algo_id) << "\n";
+                    fout << "               Runtime (in millisecond): " << fixed << setprecision(6) << (double(end_time - start_time)) / CLOCKS_PER_SEC * 1000 << "\n";
+                    fout << "               Comparisons: " << num_Comp << "\n";
                 }
 
                 delete[] a;

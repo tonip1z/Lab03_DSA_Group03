@@ -32,3 +32,6 @@
 *.app
 .vscode/launch.json
 .vscode/tasks.json
+
+# Text
+.txt
