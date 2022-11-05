@@ -61,7 +61,7 @@ void Experiment()
                 int* a = new int[DATA_SIZE[size_id]];
                 GenerateData(a, DATA_SIZE[size_id], DataOrder);
 
-                fout << "   DATA SIZE: " << DATA_SIZE[size_id] << "\n";
+                fout << "----DATA SIZE: " << DATA_SIZE[size_id] << "\n";
                 //every sorting algorithm uses the same data set
                 //for each sorting algorithm
                 for (int algo_id = 0; algo_id < 11; algo_id++)
@@ -71,7 +71,7 @@ void Experiment()
                     (*SORT_ALGO[algo_id])(a, DATA_SIZE[size_id], num_Comp);
                     end_time = clock();
 
-                    fout << "       Algorithm: " << getAlgoName(algo_id) << "\n";
+                    fout << "       + Algorithm: " << getAlgoName(algo_id) << "\n";
                     fout << "               Runtime (in millisecond): " << fixed << setprecision(6) << (double(end_time - start_time)) / CLOCKS_PER_SEC * 1000 << "\n";
                     fout << "               Comparisons: " << num_Comp << "\n";
                 }
