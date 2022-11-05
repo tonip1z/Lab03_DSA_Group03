@@ -194,7 +194,41 @@ void RadixSort(int a[], int n)
 }
 //----------------------------------------------//
 //8. ShakerSort
+void ShakerSort(int a[], int n)
+{
+	int left = 0;
+	int right = n;
 
+	while (left < right)
+	{
+		bool sorted = true;
+		right--;
+		for (int i = left; i < right - 1; i++)
+		{
+			if (a[i] > a[i + 1])
+			{
+				int tmp = a[i];
+				a[i] = a[i + 1];
+				a[i + 1] = tmp;
+				sorted = false;
+			}
+		}
+		if (sorted) break;
+		left++;
+		sorted = true;
+		for (int i = right - 1; i >= left; i--)
+		{
+			if (a[i] < a[i - 1])
+			{
+				int tmp = a[i];
+				a[i] = a[i - 1];
+				a[i - 1] = tmp;
+				sorted = false;
+			}
+		}
+		if (sorted) break;
+	}
+}
 
 //----------------------------------------------//
 //9. ShellSort
@@ -229,43 +263,44 @@ void ShellSort(int a[],int n)
 //10. CountingSort
 void CountingSort(int arr[], int n)
 {
-    int* tmp = new int[n];             //Tao mang de luu ket qua sau khi sap xep
-    int count[MAX_VAL] = { 0 };             //Tao mang dem
+    int* tmp = new int[n];             
+    int count[MAX_VAL] = { 0 };   
+	int num_comp = 0;          
 
-    //Dem so luong cua moi phan tu trong mang
-    for (int i = 0; i < n; i++) {
+   
+    for (int i = 0; i < n; i++, num_comp++) {
         ++count[arr[i]];
     }
 
-    //Cong so luong moi phan tu de tim vi tri cua moi phan tu trong mang
-    for (int i = 1; i < MAX_VAL; i++) {
+    
+    for (int i = 1; i < MAX_VAL; i++, num_comp++) {
         count[i] += count[i - 1];
     }
 
-    //Gan phan tu theo thu tu vao mang ket qua
-    for (int i = 0; i < n; i++) {
+    
+    for (int i = 0; i < n; i++, num_comp++) {
         tmp[count[arr[i]] - 1] = arr[i];
         --count[arr[i]];
     }
 
-    //Gan mang goc thanh mang da sap xep
-    for (int i = 0; i < n; i++) {
+  
+    for (int i = 0; i < n; i++, num_comp++) {
         arr[i] = tmp[i];
     }
 }
 
 //----------------------------------------------//
 //11. FlashSort
-long long InsertionSort(int a[], int n, long long &nComp)
+long long FlashInsertionSort(int a[], int n, long long &num_Comp)
 {
-	nComp = 0;
+	num_Comp = 0;
 
-	for (int i = 1; ++nComp && i < n; ++i) {
+	for (int i = 1; ++num_Comp && i < n; ++i) {
 		int currentValue = a[i];
 		int j;
 
-		for (j = i; ++nComp && j > 0; --j) {
-			if (++nComp && a[j - 1] <= currentValue)
+		for (j = i; ++num_Comp && j > 0; --j) {
+			if (++num_Comp && a[j - 1] <= currentValue)
 				break;
 			a[j] = a[j - 1];
 		}
@@ -273,7 +308,7 @@ long long InsertionSort(int a[], int n, long long &nComp)
 		a[j] = currentValue;
 	}
 	
-	return nComp;
+	return num_Comp;
 }
 
 int GetClass(int value, int minValue, int maxValue, int m)
@@ -283,32 +318,32 @@ int GetClass(int value, int minValue, int maxValue, int m)
 
 long long ClassPermute(int a[], int n, int minValue, int maxValue, int freq[], int m)
 {
-	long long nComp = 0;
-	int nMove = 1;
+	long long num_Comp = 0;
+	int num_Move = 1;
 	int i = 0;
 	int k = m;
 	int foo;
 	int bar;
 
-	while (++nComp && nMove <= n) {
-		while (++nComp && i > freq[k] - 1) {
+	while (++num_Comp && num_Move <= n) {
+		while (++num_Comp && i > freq[k] - 1) {
 			i++;
 			k = GetClass(a[i], minValue, maxValue, m);
 		}
 
 		foo = a[i];
-		while (++nComp && i <= freq[k] - 1) {
+		while (++num_Comp && i <= freq[k] - 1) {
 			k = GetClass(foo, minValue, maxValue, m);
 
 			bar = a[--freq[k]];
 			a[freq[k]] = foo;
 			foo = bar;
 
-			nMove++;
+			num_Move++;
 		}
 	}
 
-	return nComp;
+	return num_Comp;
 }
 
 long long ClassSort(int a[], int n, int freq[], int m)
@@ -317,7 +352,7 @@ long long ClassSort(int a[], int n, int freq[], int m)
 	long long dummy = 0;
 	for (int k = 2; ++nComp && k <= m; ++k)
 	{
-		InsertionSort(a + freq[k - 1], freq[k] - freq[k - 1], dummy);
+		FlashInsertionSort(a + freq[k - 1], freq[k] - freq[k - 1], dummy);
 		nComp += dummy;
 	}
 		
@@ -350,24 +385,24 @@ long long Classify(int a[], int n, int& minValue, int& maxValue, int freq[], int
 
 long long FlashSort(int a[], int n)
 {
-	long long nComp = 0;
+	long long num_Comp = 0;
 	int m = (int)(0.43 * n);
 
 	int* L = new int[m + 1];
 
-	for (int i = 0; ++nComp && i <= m; i++)
+	for (int i = 0; ++num_Comp && i <= m; i++)
 		L[i] = 0;
 
 	if (!L)
-		return nComp;
+		return num_Comp;
 
 	int minValue, maxValue;
 
-	nComp += Classify(a, n, minValue, maxValue, L, m);
-	nComp += ClassPermute(a, n, minValue, maxValue, L, m);
-	nComp += ClassSort(a, n, L, m);
+	num_Comp += Classify(a, n, minValue, maxValue, L, m);
+	num_Comp += ClassPermute(a, n, minValue, maxValue, L, m);
+	num_Comp += ClassSort(a, n, L, m);
 
 	delete[] L;
 
-	return nComp;
+	return num_Comp;
 }
