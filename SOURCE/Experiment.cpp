@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <time.h>
 #include "DataGenerator.h"
@@ -66,7 +67,7 @@ void Experiment()
                 cout << "Algorithm: " << getAlgoName(algo_id) << "\n";
                 cout << "Data size: " << DATA_SIZE[size_id] << "\n";
                 cout << "Data order: " << getDataOrder(DataOrder) << "\n";
-                cout << "\nRuntime: " << (double)(end_time - start_time) / CLOCKS_PER_SEC * 1000 << "\n";
+                cout << "\nRuntime (in millisecond): " << fixed << setprecision(6) << difftime(end_time, start_time) * 1000 << "\n";
                 cout << "Comparisons: " << num_Comp << "\n";
             }
 

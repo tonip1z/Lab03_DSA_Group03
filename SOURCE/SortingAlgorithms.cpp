@@ -370,7 +370,6 @@ int GetClass(int value, int minValue, int maxValue, int m, long long &num_Comp)
 
 void ClassPermute(int* a, int n, int minValue, int maxValue, int freq[], int m, long long &num_Comp)
 {
-	long long num_Comp = 0;
 	int num_Move = 1;
 	int i = 0;
 	int k = m;
