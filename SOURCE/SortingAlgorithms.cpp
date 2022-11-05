@@ -23,7 +23,7 @@ using namespace std;
 //Implementation goes here, write code in corresponding section for each algorithm
 //----------------------------------------------//
 //1. SelectionSort
-void SelectionSort(int a[], int n) 
+void SelectionSort(int a[], int n, long long &num_Comp) 
 {
     for (int i = 0; i < n - 1; i++)
     {
@@ -45,7 +45,7 @@ void SelectionSort(int a[], int n)
 
 //----------------------------------------------//
 //3. BubbleSort
-void BubbleSort(int a[], int n)
+void BubbleSort(int a[], int n, long long &num_Comp)
 {
     for (int i = 0; i < n - 1; i++)
     {
@@ -59,7 +59,7 @@ void BubbleSort(int a[], int n)
     }
 }
 
-void BubbleSort_with_flag(int a[], int n)
+void BubbleSort_with_flag(int a[], int n, long long &num_Comp)
 {
     int i = 0;
     bool flag;
@@ -91,7 +91,7 @@ void BubbleSort_with_flag(int a[], int n)
 
 //The arguments contain array a (unsorted), array temp to store the answer, begin, pivot, end (of the sorting range).
 // Using the pivot, array has splitted into two runs: the first half and the second half of the original array. 
-void MergeRun(int a[], int temp[], int p, int t, int q)     
+void MergeRun(int a[], int temp[], int p, int t, int q, long long &num_Comp)     
 {
     int m = 0;      // starting point of array temp
     int n = t - 1;    //end point of the first run
@@ -128,21 +128,21 @@ void MergeRun(int a[], int temp[], int p, int t, int q)
     }
 }
 
-void Sort_on_Run(int a[],int temp[],int p, int q)
+void Sort_on_Run(int a[],int temp[],int p, int q, long long &num_Comp)
 {
     if (p < q)
     {
         int k = (p + q)/2; // Choosing pivot at the middle of array a
-        Sort_on_Run(a, temp, p, k);
-        Sort_on_Run(a, temp, k + 1, q);
-        MergeRun(a, temp, p, k + 1, q);
+        Sort_on_Run(a, temp, p, k, num_Comp);
+        Sort_on_Run(a, temp, k + 1, q, num_Comp);
+        MergeRun(a, temp, p, k + 1, q, num_Comp);
     }
 }
 
-void MergeSort(int a[], int n)
+void MergeSort(int a[], int n, long long &num_Comp)
 {
     int* temp = new int[n];
-    Sort_on_Run(a, temp, 0, n - 1);
+    Sort_on_Run(a, temp, 0, n - 1, num_Comp);
 }
 
 
@@ -153,7 +153,7 @@ void MergeSort(int a[], int n)
 //----------------------------------------------//
 //7. RadixSort
 // Least Significant Decimal Radix Sort
-void RadixSort(int a[], int n)
+void RadixSort(int a[], int n, long long &num_Comp)
 {
     const int base = 10;     // Number of "buckets" = 10
     int bucket[base];
@@ -194,7 +194,7 @@ void RadixSort(int a[], int n)
 }
 //----------------------------------------------//
 //8. ShakerSort
-void ShakerSort(int a[], int n)
+void ShakerSort(int a[], int n, long long &num_Comp)
 {
 	int left = 0;
 	int right = n;
@@ -232,7 +232,7 @@ void ShakerSort(int a[], int n)
 
 //----------------------------------------------//
 //9. ShellSort
-void ShellSort(int a[],int n)
+void ShellSort(int a[], int n, long long &num_Comp)
 {
     int m = 3;
     int h[] = {1, 3, 7};
@@ -261,7 +261,7 @@ void ShellSort(int a[],int n)
 
 //----------------------------------------------//
 //10. CountingSort
-void CountingSort(int arr[], int n)
+void CountingSort(int arr[], int n, long long &num_Comp)
 {
     int* tmp = new int[n];             
     int count[MAX_VAL] = { 0 };   
@@ -311,12 +311,12 @@ long long FlashInsertionSort(int a[], int n, long long &num_Comp)
 	return num_Comp;
 }
 
-int GetClass(int value, int minValue, int maxValue, int m)
+int GetClass(int value, int minValue, int maxValue, int m, long long &num_Comp)
 {
 	return 1 + ((((long long)(m - 1)) * (value - minValue)) / (maxValue - minValue));
 }
 
-long long ClassPermute(int a[], int n, int minValue, int maxValue, int freq[], int m)
+long long ClassPermute(int a[], int n, int minValue, int maxValue, int freq[], int m, long long &num_Comp)
 {
 	long long num_Comp = 0;
 	int num_Move = 1;
@@ -328,12 +328,12 @@ long long ClassPermute(int a[], int n, int minValue, int maxValue, int freq[], i
 	while (++num_Comp && num_Move <= n) {
 		while (++num_Comp && i > freq[k] - 1) {
 			i++;
-			k = GetClass(a[i], minValue, maxValue, m);
+			k = GetClass(a[i], minValue, maxValue, m, num_Comp);
 		}
 
 		foo = a[i];
 		while (++num_Comp && i <= freq[k] - 1) {
-			k = GetClass(foo, minValue, maxValue, m);
+			k = GetClass(foo, minValue, maxValue, m, num_Comp);
 
 			bar = a[--freq[k]];
 			a[freq[k]] = foo;
@@ -346,7 +346,7 @@ long long ClassPermute(int a[], int n, int minValue, int maxValue, int freq[], i
 	return num_Comp;
 }
 
-long long ClassSort(int a[], int n, int freq[], int m)
+long long ClassSort(int a[], int n, int freq[], int m, long long &num_Comp)
 {
 	long long nComp = 0;
 	long long dummy = 0;
@@ -359,7 +359,7 @@ long long ClassSort(int a[], int n, int freq[], int m)
 	return nComp;
 }
 
-long long Classify(int a[], int n, int& minValue, int& maxValue, int freq[], int m)
+long long Classify(int a[], int n, int& minValue, int& maxValue, int freq[], int m, long long &num_Comp)
 {
 	long long nComp = 0;
 
@@ -375,7 +375,7 @@ long long Classify(int a[], int n, int& minValue, int& maxValue, int freq[], int
 	}
 
 	for (int i = 0; ++nComp && i < n; ++i)
-		++freq[GetClass(a[i], minValue, maxValue, m)];
+		++freq[GetClass(a[i], minValue, maxValue, m, num_Comp)];
 
 	for (int i = 1; ++nComp && i <= m; ++i)
 		freq[i] += freq[i - 1];
@@ -383,7 +383,7 @@ long long Classify(int a[], int n, int& minValue, int& maxValue, int freq[], int
 	return nComp;
 }
 
-long long FlashSort(int a[], int n)
+long long FlashSort(int a[], int n, long long &num_Comp)
 {
 	long long num_Comp = 0;
 	int m = (int)(0.43 * n);
@@ -398,9 +398,9 @@ long long FlashSort(int a[], int n)
 
 	int minValue, maxValue;
 
-	num_Comp += Classify(a, n, minValue, maxValue, L, m);
-	num_Comp += ClassPermute(a, n, minValue, maxValue, L, m);
-	num_Comp += ClassSort(a, n, L, m);
+	num_Comp += Classify(a, n, minValue, maxValue, L, m, num_Comp);
+	num_Comp += ClassPermute(a, n, minValue, maxValue, L, m, num_Comp);
+	num_Comp += ClassSort(a, n, L, m, num_Comp);
 
 	delete[] L;
 
