@@ -1,9 +1,15 @@
 #include <iostream>
+#include <string>
+#include <time.h>
 #include "DataGenerator.h"
 #include "SortingAlgorithms.h"
 #include "Experiment.h"
 
 using namespace std;
+
+//supporting function prototypes
+string getAlgoName(int algo_id);
+string getDataOrder(int DataOrder);
 
 //SORT_ALGO[] definition
 //SORT_ALGO[] is an array of function pointers, each points to the corresponding sorting algorithm in order as follow:
@@ -19,7 +25,7 @@ using namespace std;
 //      SORT_ALGO[9] points to CountingSort()
 //      SORT_ALGO[10] points to FlashSort()
 
-//Thank you Mr. Pham Nguyen Son Tung for introducing us to function pointers
+//Special thanks to Mr. Pham Nguyen Son Tung for introducing us to function pointers
 void (*SORT_ALGO[11])(int* a, int n, long long &num_Comp) = {SelectionSort, InsertionSort, BubbleSort, HeapSort, MergeSort, QuickSort, RadixSort, ShakerSort, ShellSort, CountingSort, FlashSort};
 
 //DATA_SIZE definition:
@@ -30,19 +36,106 @@ void (*SORT_ALGO[11])(int* a, int n, long long &num_Comp) = {SelectionSort, Inse
 //      DATA_SIZE[4] = 300000
 //      DATA_SIZE[5] = 500000
 
+//the definition itself is in "Experiment.h"
+
 void Experiment()
 {
-    //for each DATA_SIZE
-    for (int i = 0; i < 6; i++)
+    long long num_Comp; //used to count number of comparison operation used in an algorithm
+    clock_t start_time, end_time; //used to calculate runtime of an algorithm
+    
+    //for each Data Order
+    for (int DataOrder = 0; DataOrder < 4; DataOrder++)
     {
-        int* a = new int[DATA_SIZE[i]];
-
-        //for each sorting algorithm
-        for (int j = 0; j < 10; j++)
+        //for each Data Size
+        for (int size_id = 0; size_id < 6; size_id++)
         {
+            //create and generate data for a dynamic array of size DATA_SIZE[size_id] and of corresponding data order type 
+            int* a = new int[DATA_SIZE[size_id]];
+            GenerateData(a, DATA_SIZE[size_id], DataOrder);
 
+            //every sorting algorithm uses the same data set
+            //for each sorting algorithm
+            for (int algo_id = 0; algo_id < 11; algo_id++)
+            {
+                //method used for getting runtime was suggested by stackoverflow user Thomas Pornin in the thread: https://stackoverflow.com/questions/5248915/execution-time-of-c-program
+                start_time = clock();
+                (*SORT_ALGO[algo_id])(a, DATA_SIZE[size_id], num_Comp);
+                end_time = clock();
+
+                cout << "\n---------------------------\n";
+                cout << "Algorithm: " << getAlgoName(algo_id) << "\n";
+                cout << "Data size: " << DATA_SIZE[size_id] << "\n";
+                cout << "Data order: " << getDataOrder(DataOrder) << "\n";
+                cout << "\nRuntime: " << (double)(end_time - start_time) / CLOCKS_PER_SEC * 1000 << "\n";
+                cout << "Comparisons: " << num_Comp << "\n";
+            }
+
+            delete[] a;
         }
+    }
+}
 
-        delete[] a;
+string getAlgoName(int algo_id)
+{
+    switch (algo_id)
+    {
+        case 0:
+            return "SelectionSort";
+            break;
+        case 1:
+            return "InsertionSort";
+            break;
+        case 2:
+            return "BubbleSort";
+            break;
+        case 3:
+            return "HeapSort";
+            break;
+        case 4:
+            return "MergeSort";
+            break;
+        case 5:
+            return "QuickSort";
+            break;
+        case 6:
+            return "RadixSort";
+            break;
+        case 7:
+            return "RadixSort";
+            break;
+        case 8:
+            return "ShellSort";
+            break;
+        case 9:
+            return "CountingSort";
+            break;
+        case 10:
+            return "FlashSort";
+            break;
+        default:
+            return "invalid algo_id";
+            break;
+    }
+}
+
+string getDataOrder(int DataOrder)
+{
+    switch (DataOrder)
+    {
+        case 0:
+            return "Randomized";
+            break;
+        case 1:
+            return "Sorted";
+            break;
+        case 2:
+            return "Reversely sorted";
+            break;
+        case 3:
+            return "Nearly sorted";
+            break;
+        default:
+            return "invalid DataOrder_id";
+            break;
     }
 }
