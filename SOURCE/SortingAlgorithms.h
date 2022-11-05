@@ -6,11 +6,23 @@
 //    ...
 
 //Function prototypes for each sorting algorithm goes here
+//1. SelectionSort
+void SelectionSort(int a[], int n);
+
+//3. BubbleSort
+void BubbleSort(int a[], int n);
+void BubbleSort_with_flag(int a[], int n);
+
+//5. MergeSort
+void MergeSort(int a[], int n);
+void MergeRun(int a[], int temp[], int p, int t, int q);
+void Sort_on_Run(int a[],int temp[],int p, int q);
 
 //7. RadixSort
 void RadixSort(int a[], int n);
-int getMax(int a[], int n);
-void CountRadix(int a[], int n, int exp);
+
+//9. ShellSort
+void ShellSort(int a[],int n);
 
 //10. CountingSort
 void CountingSort(int arr[], int n);
