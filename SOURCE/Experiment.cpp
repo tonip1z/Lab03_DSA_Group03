@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <string>
 #include <time.h>
@@ -41,39 +42,49 @@ void (*SORT_ALGO[11])(int* a, int n, long long &num_Comp) = {SelectionSort, Inse
 
 void Experiment()
 {
-    long long num_Comp; //used to count number of comparison operation used in an algorithm
-    clock_t start_time, end_time; //used to calculate runtime of an algorithm
-    
-    //for each Data Order
-    for (int DataOrder = 0; DataOrder < 4; DataOrder++)
+    //The experiment result will be exported to the file "ExperimentResult.txt" in the project directory
+    ofstream fout;
+    fout.open("ExperimentResult.txt");
+    if (fout.is_open())
     {
-        //for each Data Size
-        for (int size_id = 0; size_id < 6; size_id++)
+        long long num_Comp; //used to count number of comparison operation used in an algorithm
+        clock_t start_time, end_time; //used to calculate runtime of an algorithm
+        
+        //for each Data Order
+        for (int DataOrder = 0; DataOrder < 4; DataOrder++)
         {
-            //create and generate data for a dynamic array of size DATA_SIZE[size_id] and of corresponding data order type 
-            int* a = new int[DATA_SIZE[size_id]];
-            GenerateData(a, DATA_SIZE[size_id], DataOrder);
-
-            //every sorting algorithm uses the same data set
-            //for each sorting algorithm
-            for (int algo_id = 0; algo_id < 11; algo_id++)
+            cout << "\nData order: " << getDataOrder(DataOrder) << "\n";
+            //for each Data Size
+            for (int size_id = 0; size_id < 6; size_id++)
             {
-                //method used for getting runtime was suggested by stackoverflow user Thomas Pornin in the thread: https://stackoverflow.com/questions/5248915/execution-time-of-c-program
-                start_time = clock();
-                (*SORT_ALGO[algo_id])(a, DATA_SIZE[size_id], num_Comp);
-                end_time = clock();
+                //create and generate data for a dynamic array of size DATA_SIZE[size_id] and of corresponding data order type 
+                int* a = new int[DATA_SIZE[size_id]];
+                GenerateData(a, DATA_SIZE[size_id], DataOrder);
 
-                cout << "\n---------------------------\n";
-                cout << "Algorithm: " << getAlgoName(algo_id) << "\n";
-                cout << "Data size: " << DATA_SIZE[size_id] << "\n";
-                cout << "Data order: " << getDataOrder(DataOrder) << "\n";
-                cout << "\nRuntime (in millisecond): " << fixed << setprecision(6) << difftime(end_time, start_time) * 1000 << "\n";
-                cout << "Comparisons: " << num_Comp << "\n";
+                cout << "   Data size: " << DATA_SIZE[size_id] << "\n";
+                //every sorting algorithm uses the same data set
+                //for each sorting algorithm
+                for (int algo_id = 0; algo_id < 11; algo_id++)
+                {
+                    //method used for getting runtime was suggested by stackoverflow user Thomas Pornin in the thread: https://stackoverflow.com/questions/5248915/execution-time-of-c-program
+                    start_time = clock();
+                    (*SORT_ALGO[algo_id])(a, DATA_SIZE[size_id], num_Comp);
+                    end_time = clock();
+
+                    cout << "       Algorithm: " << getAlgoName(algo_id) << "\n";
+                    cout << "           Runtime (in millisecond): " << fixed << setprecision(6) << difftime(end_time, start_time) * 1000 << "\n";
+                    cout << "           Comparisons: " << num_Comp << "\n";
+                }
+
+                delete[] a;
             }
-
-            delete[] a;
         }
+        fout.close();
     }
+    else
+        cout << "Cannot open 'ExperimentResult.txt'.\n";
+
+    
 }
 
 string getAlgoName(int algo_id)
@@ -102,7 +113,7 @@ string getAlgoName(int algo_id)
             return "RadixSort";
             break;
         case 7:
-            return "RadixSort";
+            return "ShakerSort";
             break;
         case 8:
             return "ShellSort";
