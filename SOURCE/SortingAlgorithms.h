@@ -43,7 +43,7 @@ void CountingSort(int* a, int n, long long &num_Comp);
 
 //11. FlashSort
 void FlashSort(int* a, int n, long long &num_Comp);
-long long FlashInsertionSort(int* a, int n, long long &nComp);        //Temporary
+void FlashInsertionSort(int* a, int n, long long &num_Comp);       //Temporary
 int GetClass(int value, int minValue, int maxValue, int m, long long &num_Comp);
 void ClassPermute(int* a, int n, int minValue, int maxValue, int freq[], int m, long long &num_Comp);
 void ClassSort(int* a, int n, int freq[], int m, long long &num_Comp);

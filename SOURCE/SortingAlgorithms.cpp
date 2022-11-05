@@ -25,6 +25,7 @@ using namespace std;
 //1. SelectionSort
 void SelectionSort(int* a, int n, long long &num_Comp) 
 {
+    num_Comp = 0;
     for (int i = 0; i < n - 1; i++)
     {
         int k_min = i;
@@ -43,6 +44,7 @@ void SelectionSort(int* a, int n, long long &num_Comp)
 //2. InsertionSort
 void InsertionSort(int* a, int n, long long &num_Comp)
 {
+    num_Comp = 0;
 	int i, j, key;
 	for (i = 1; i < n; i++)
 	{
@@ -61,6 +63,7 @@ void InsertionSort(int* a, int n, long long &num_Comp)
 //3. BubbleSort
 void BubbleSort(int* a, int n, long long &num_Comp)
 {
+    num_Comp = 0;
     for (int i = 0; i < n - 1; i++)
     {
         for (int j = n - 1; j > i; j--)
@@ -75,6 +78,7 @@ void BubbleSort(int* a, int n, long long &num_Comp)
 
 void BubbleSort_with_flag(int* a, int n, long long &num_Comp)
 {
+    num_Comp = 0;
     int i = 0;
     bool flag;
     while (flag)
@@ -122,6 +126,7 @@ void HeapConstruct(int* a, int n, long long &num_Comp)
 
 void HeapSort(int* a, int n, long long &num_Comp)
 {
+    num_Comp = 0;
 	HeapConstruct(a, n, num_Comp);
 	int m = n - 1;
 	while (m > 0)
@@ -190,6 +195,7 @@ void Sort_on_Run(int* a, int temp[],int p, int q, long long &num_Comp)
 
 void MergeSort(int* a, int n, long long &num_Comp)
 {
+    num_Comp = 0;
     int* temp = new int[n];
     Sort_on_Run(a, temp, 0, n - 1, num_Comp);
 }
@@ -200,6 +206,7 @@ void MergeSort(int* a, int n, long long &num_Comp)
 void QuickSort(int* a, int n, long long &num_Comp)
 {
     //temporary for testing
+    num_Comp = 0;
 }
 
 //----------------------------------------------//
@@ -207,6 +214,8 @@ void QuickSort(int* a, int n, long long &num_Comp)
 // Least Significant Decimal Radix Sort
 void RadixSort(int* a, int n, long long &num_Comp)
 {
+    num_Comp = 0;
+
     const int base = 10;     // Number of "buckets" = 10
     int bucket[base];
     int* p = new int[n];
@@ -248,6 +257,8 @@ void RadixSort(int* a, int n, long long &num_Comp)
 //8. ShakerSort
 void ShakerSort(int* a, int n, long long &num_Comp)
 {
+    num_Comp = 0;
+
 	int left = 0;
 	int right = n;
 
@@ -286,6 +297,8 @@ void ShakerSort(int* a, int n, long long &num_Comp)
 //9. ShellSort
 void ShellSort(int* a, int n, long long &num_Comp)
 {
+    num_Comp = 0;
+
     int m = 3;
     int h[] = {1, 3, 7};
     for (int r = m - 1; r >= 0; r--)
@@ -315,38 +328,33 @@ void ShellSort(int* a, int n, long long &num_Comp)
 //10. CountingSort
 void CountingSort(int* a, int n, long long &num_Comp)
 {
-    int* tmp = new int[n];             
-    int count[MAX_VAL] = { 0 };   
-	int num_comp = 0;          
+    num_Comp = 0;
 
-   
-    for (int i = 0; i < n; i++, num_comp++) {
+    int* tmp = new int[n];             
+    int count[MAX_VAL] = { 0 };       
+
+    for (int i = 0; i < n; i++, num_Comp++) {
         ++count[a[i]];
     }
-
     
-    for (int i = 1; i < MAX_VAL; i++, num_comp++) {
+    for (int i = 1; i < MAX_VAL; i++, num_Comp++) {
         count[i] += count[i - 1];
     }
 
-    
-    for (int i = 0; i < n; i++, num_comp++) {
+    for (int i = 0; i < n; i++, num_Comp++) {
         tmp[count[a[i]] - 1] = a[i];
         --count[a[i]];
     }
 
-  
-    for (int i = 0; i < n; i++, num_comp++) {
+    for (int i = 0; i < n; i++, num_Comp++) {
         a[i] = tmp[i];
     }
 }
 
 //----------------------------------------------//
 //11. FlashSort
-long long FlashInsertionSort(int* a, int n, long long &num_Comp)
+void FlashInsertionSort(int* a, int n, long long &num_Comp)
 {
-	num_Comp = 0;
-
 	for (int i = 1; ++num_Comp && i < n; ++i) {
 		int currentValue = a[i];
 		int j;
@@ -359,8 +367,6 @@ long long FlashInsertionSort(int* a, int n, long long &num_Comp)
 
 		a[j] = currentValue;
 	}
-	
-	return num_Comp;
 }
 
 int GetClass(int value, int minValue, int maxValue, int m, long long &num_Comp)
@@ -370,7 +376,6 @@ int GetClass(int value, int minValue, int maxValue, int m, long long &num_Comp)
 
 void ClassPermute(int* a, int n, int minValue, int maxValue, int freq[], int m, long long &num_Comp)
 {
-	long long num_Comp = 0;
 	int num_Move = 1;
 	int i = 0;
 	int k = m;
@@ -398,12 +403,9 @@ void ClassPermute(int* a, int n, int minValue, int maxValue, int freq[], int m, 
 
 void ClassSort(int* a, int n, int freq[], int m, long long &num_Comp)
 {
-	long long nComp = 0;
-	long long dummy = 0;
-	for (int k = 2; ++nComp && k <= m; ++k)
+	for (int k = 2; ++num_Comp && k <= m; ++k)
 	{
-		FlashInsertionSort(a + freq[k - 1], freq[k] - freq[k - 1], dummy);
-		nComp += dummy;
+		FlashInsertionSort(a + freq[k - 1], freq[k] - freq[k - 1], num_Comp);
 	}
 }
 
@@ -430,6 +432,7 @@ void Classify(int* a, int n, int& minValue, int& maxValue, int freq[], int m, lo
 void FlashSort(int* a, int n, long long &num_Comp)
 {
 	num_Comp = 0;
+    
 	int m = (int)(0.43 * n);
 
 	int* L = new int[m + 1];
