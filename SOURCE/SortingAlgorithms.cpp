@@ -41,7 +41,21 @@ void SelectionSort(int a[], int n, long long &num_Comp)
 
 //----------------------------------------------//
 //2. InsertionSort
-
+void InsertionSort(int a[], int n)
+{
+	int i, j, key;
+	for (i = 1; i < n; i++)
+	{
+		key = a[i];
+		j = i - 1;
+		while (j >= 0 && a[j] > key)
+		{
+			swap(a[j], a[j + 1]);
+			j = j - 1;
+		}
+		a[j + 1] = key;
+	}
+}
 
 //----------------------------------------------//
 //3. BubbleSort
@@ -82,6 +96,42 @@ void BubbleSort_with_flag(int a[], int n, long long &num_Comp)
 //----------------------------------------------//
 //4. HeapSort
 
+void HeapRebuild(int index, int a[], int n)
+{
+	int  max = index;
+	int j = 2 * max + 1;
+	int k = 2 * max + 2;
+	if (j<=n&&a[max] < a[j])
+		max = j;
+	if (k<=n&&a[max] < a[k])
+		max = k;
+	if (max != index)
+	{
+		swap(a[index], a[max]);
+		HeapRebuild(max, a, n);
+	}
+}
+
+void HeapConstruct(int a[], int n)
+{
+	int index;
+	for(index = n / 2 - 1; index >= 0; index--)
+	{
+		HeapRebuild(index, a, n);
+	}
+}
+
+void HeapSort(int a[], int n)
+{
+	HeapConstruct(a, n);
+	int m = n - 1;
+	while (m > 0)
+	{
+		swap(a[0], a[m]);
+		m = m - 1;
+		HeapRebuild(0, a, m);
+	}
+}
 
 //----------------------------------------------//
 //5. MergeSort
