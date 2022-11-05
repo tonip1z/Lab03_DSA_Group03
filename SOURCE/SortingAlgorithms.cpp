@@ -432,6 +432,7 @@ void Classify(int* a, int n, int& minValue, int& maxValue, int freq[], int m, lo
 void FlashSort(int* a, int n, long long &num_Comp)
 {
 	num_Comp = 0;
+    
 	int m = (int)(0.43 * n);
 
 	int* L = new int[m + 1];
