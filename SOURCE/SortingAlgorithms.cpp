@@ -1,7 +1,7 @@
 #include <iostream>
 #include "SortingAlgorithms.h"
 
-#define MAX_VAL 100001 //used for CountingSort
+#define MAX_VAL 100001 //used in CountingSort
 
 using namespace std;
 
@@ -204,7 +204,6 @@ void QuickSort(int* a, int n, long long &num_Comp)
 // Least Significant Decimal Radix Sort
 void RadixSort(int* a, int n, long long &num_Comp)
 {
-    cout << "got to the beginning of radix sort\n";
     num_Comp = 0;
 
     const int base = 10;     // Number of "buckets" = 10
@@ -216,6 +215,7 @@ void RadixSort(int* a, int n, long long &num_Comp)
         if ((++num_Comp) && (a[i] > max))
             max = a[i];
     int weight = 1;
+
     while ((++num_Comp) && (max / weight > 0))
     {
         // Create empty buckets (starting value of every bucket = 0) 
@@ -227,24 +227,23 @@ void RadixSort(int* a, int n, long long &num_Comp)
             bucket[(a[i]/weight) % base]++;
 
         // Count the number of values that have been listed in the buckets
-        for(int i = 0; (++num_Comp) && (i < base); i++)
-            bucket[i] = bucket[i] + bucket[i-1];
-
-        // Putting values into buckets (bucket[i] loops because bucket[i] = n, the number of values in array a.)
+        for(int i = 1; (++num_Comp) && (i < base); i++)
+            bucket[i] += bucket[i-1];
+        
+        // Putting values into buckets (bucket[i] loops because bucket[i] = n, the number of values in array a)
         for(int i = n - 1; (++num_Comp) && (i >= 0); i--)
         {
             bucket[(a[i]/weight) % base]--;
             p[bucket[(a[i]/weight) % base]] = a[i];
         }
-        
+
         // Return values in each bucket back to array a, one by one
         for(int i = 0; (++num_Comp) && (i < n); i++)
             a[i] = p[i];
-
-        weight  = weight * base; // Next weight 
+        
+        weight = weight * base; // Next weight 
     }
 
-    cout << "got to the end of radix sort\n";
     delete[] p;
 }
 //----------------------------------------------//

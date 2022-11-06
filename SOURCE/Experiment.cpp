@@ -100,7 +100,7 @@ bool TestAlgorithm(int algo_id)
     GenerateRandomData(testDataSet, 100);
 
     (*SORT_ALGO[algo_id])(testDataSet, 100, num_Comp);
-
+    
     for (int i = 1; i < 100; i++)
         if (testDataSet[i] < testDataSet[i - 1])
         {
