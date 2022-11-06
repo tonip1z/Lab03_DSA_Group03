@@ -30,8 +30,7 @@
 *.exe
 *.out
 *.app
-.vscode/launch.json
-.vscode/tasks.json
+*.json
 
 # Text
 *.txt
