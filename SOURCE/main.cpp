@@ -19,6 +19,6 @@ int main()
 			cout << "FAILED\n";
 	}
 	*/
-	
+	Experiment();
 	return 0;
 }

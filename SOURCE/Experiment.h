@@ -3,7 +3,7 @@
 
 using namespace std;
 
-const int DATA_SIZE[6] = {100, 300, 500, 1000, 3000, 5000};
+const int DATA_SIZE[6] = {10000, 30000, 50000, 100000, 300000, 500000};
 
 void Experiment();
 bool TestAlgorithm(int algo_id);
