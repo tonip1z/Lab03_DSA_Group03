@@ -55,7 +55,7 @@ void Experiment()
         {
             fout << "\nDATA ORDER: " << getDataOrder(DataOrder) << "\n";
             //for each Data Size
-            for (int size_id = 0; size_id < 6; size_id++)
+            for (int size_id = 0; size_id < 1; size_id++)
             {
                 //create and generate data for a dynamic array of size DATA_SIZE[size_id] and of corresponding data order type 
                 int* a = new int[DATA_SIZE[size_id]];
@@ -68,7 +68,13 @@ void Experiment()
                 {
                     //method used for getting runtime was suggested by stackoverflow user Thomas Pornin in the thread: https://stackoverflow.com/questions/5248915/execution-time-of-c-program
                     start_time = clock();
+                    for (int i = 0; i < DATA_SIZE[size_id]; i++)
+                        fout << a[i] << " ";
+                    fout << "\n";
                     (*SORT_ALGO[algo_id])(a, DATA_SIZE[size_id], num_Comp);
+                    for (int i = 0; i < DATA_SIZE[size_id]; i++)
+                        fout << a[i] << " ";
+                    cout << "\n";
                     end_time = clock();
 
                     fout << "       + Algorithm: " << getAlgoName(algo_id) << "\n";
