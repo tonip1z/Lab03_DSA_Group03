@@ -268,7 +268,7 @@ void ShakerSort(int* a, int n, long long &num_Comp)
 				sorted = false;
 			}
 		}
-		if (sorted) break;
+		if (++num_Comp && sorted) break;
 		left++;
 		sorted = true;
 		for (int i = right - 1; ++num_Comp && i >= left; i--)
@@ -281,7 +281,7 @@ void ShakerSort(int* a, int n, long long &num_Comp)
 				sorted = false;
 			}
 		}
-		if (sorted) break;
+		if (++num_Comp && sorted) break;
 	}
 }
 
