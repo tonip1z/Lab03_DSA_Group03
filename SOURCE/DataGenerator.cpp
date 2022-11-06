@@ -17,7 +17,7 @@ void HoanVi(T &a, T &b)
 //This file was modified to be compatible with dynamic arrays
 //-------------------------------------------------
 
-void GenerateRandomData(int* &a, int n)
+void GenerateRandomData(int* a, int n)
 {
 	srand((unsigned int)time(NULL));
 
@@ -27,7 +27,7 @@ void GenerateRandomData(int* &a, int n)
 	}
 }
 
-void GenerateSortedData(int* &a, int n)
+void GenerateSortedData(int* a, int n)
 {
 	for (int i = 0; i < n; i++)
 	{
@@ -35,7 +35,7 @@ void GenerateSortedData(int* &a, int n)
 	}
 }
 
-void GenerateReverseData(int* &a, int n)
+void GenerateReverseData(int* a, int n)
 {
 	for (int i = 0; i < n; i++)
 	{
@@ -43,7 +43,7 @@ void GenerateReverseData(int* &a, int n)
 	}
 }
 
-void GenerateNearlySortedData(int* &a, int n)
+void GenerateNearlySortedData(int* a, int n)
 {
 	for (int i = 0; i < n; i++)
 	{
@@ -58,7 +58,7 @@ void GenerateNearlySortedData(int* &a, int n)
 	}
 }
 
-void GenerateData(int* &a, int n, int dataType)
+void GenerateData(int* a, int n, int dataType)
 {
 	switch (dataType)
 	{

@@ -45,6 +45,9 @@ void Experiment()
     //The experiment result will be exported to the file "ExperimentResult.txt" in the project directory
     ofstream fout;
     fout.open("ExperimentResult.txt");
+
+    fout << "file test.\n";
+
     if (fout.is_open())
     {
         long long num_Comp; //used to count number of comparison operation used in an algorithm
@@ -74,7 +77,7 @@ void Experiment()
                     (*SORT_ALGO[algo_id])(a, DATA_SIZE[size_id], num_Comp);
                     for (int i = 0; i < DATA_SIZE[size_id]; i++)
                         fout << a[i] << " ";
-                    cout << "\n";
+                    fout << "\n\n";
                     end_time = clock();
 
                     fout << "       + Algorithm: " << getAlgoName(algo_id) << "\n";
