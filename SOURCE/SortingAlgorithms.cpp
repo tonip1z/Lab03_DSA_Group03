@@ -26,17 +26,13 @@ using namespace std;
 void SelectionSort(int* a, int n, long long &num_Comp) 
 {
     num_Comp = 0;
-    for (int i = 0; i < n - 1; i++)
+    for (int i = 0; (++num_Comp) && (i < n - 1); i++)
     {
         int k_min = i;
         for (int j = i + 1; j < n; j++)
-        {
-            if (a[k_min] > a[j])
-            {
+            if ((++num_Comp) && (a[k_min] > a[j]))
                 k_min = j;
-                swap(a[i], a[k_min]);
-            }
-        }
+        swap(a[i], a[k_min]);
     }
 }
 
@@ -64,29 +60,23 @@ void InsertionSort(int* a, int n, long long &num_Comp)
 void BubbleSort(int* a, int n, long long &num_Comp)
 {
     num_Comp = 0;
-    for (int i = 0; i < n - 1; i++)
-    {
+    for (int i = 0; (++num_Comp) && (i < n - 1); i++)
         for (int j = n - 1; j > i; j--)
-        {
-            if (a[j] < a[j - 1])
-            {
+            if ((++num_Comp) && (a[j] < a[j - 1]))
                 swap(a[j], a[j - 1]);
-            }
-        }
-    }
 }
 
 void BubbleSort_with_flag(int* a, int n, long long &num_Comp)
 {
     num_Comp = 0;
     int i = 0;
-    bool flag;
-    while (flag)
+    bool flag = true;
+    while ((++num_Comp) && (flag))
     {
         flag = false;
-        for (int j = n - 1; j > i; j--)
+        for (int j = n - 1; (++num_Comp) && (j > i); j--)
         {
-            if (a[j] < a[j - 1])
+            if ((++num_Comp) && (a[j] < a[j - 1]))
             {
                 swap(a[j], a[j - 1]);
                 flag = true;
@@ -95,7 +85,6 @@ void BubbleSort_with_flag(int* a, int n, long long &num_Comp)
         }
     }
 }
-
 
 //----------------------------------------------//
 //4. HeapSort
@@ -152,9 +141,9 @@ void MergeRun(int* a, int temp[], int p, int t, int q, long long &num_Comp)
     int i = p;
     int j = t;
     
-    while ((i <= n) && (j <= q))
+    while (((++num_Comp) && (i <= n)) && ((++num_Comp) && (j <= q)))
     {
-        if(a[i] <= a[j])
+        if((++num_Comp) && (a[i] <= a[j]))
         {
             temp[m] = a[i];
             i++;
@@ -168,14 +157,14 @@ void MergeRun(int* a, int temp[], int p, int t, int q, long long &num_Comp)
     }
     
     // Put the rest of the first run into array temp
-    for (int r = i; r <= n; r++)
+    for (int r = i; (++num_Comp) && (r <= n); r++)
     {
         temp[m] = a[r];
         m++;
     }
     
     // Put the rest of the second run into array temp
-    for (int r = j; r <= q; r++)
+    for (int r = j; (++num_Comp) && (r <= q); r++)
     {
         temp[m] = a[r];
         m++;
@@ -184,7 +173,7 @@ void MergeRun(int* a, int temp[], int p, int t, int q, long long &num_Comp)
 
 void Sort_on_Run(int* a, int temp[],int p, int q, long long &num_Comp)
 {
-    if (p < q)
+    if ((++num_Comp) && (p < q))
     {
         int k = (p + q)/2; // Choosing pivot at the middle of array a
         Sort_on_Run(a, temp, p, k, num_Comp);
@@ -198,6 +187,7 @@ void MergeSort(int* a, int n, long long &num_Comp)
     num_Comp = 0;
     int* temp = new int[n];
     Sort_on_Run(a, temp, 0, n - 1, num_Comp);
+    delete[] temp;
 }
 
 
@@ -221,37 +211,39 @@ void RadixSort(int* a, int n, long long &num_Comp)
     int* p = new int[n];
 
     int max = a[0];
-    for(int i = 1; i < n; i++)
-        if (a[i] > max)
+    for (int i = 1; (++num_Comp) && (i < n); i++)
+        if ((++num_Comp) && (a[i] > max))
             max = a[i];
     int weight = 1;
-    while(max/weight > 0)
+    while ((++num_Comp) && (max / weight > 0))
     {
         // Create empty buckets (starting value of every bucket = 0) 
-        for(int i = 0; i < base; i++)
+        for(int i = 0; (++num_Comp) && (i < base); i++)
             bucket[i] = 0;  // In here we use the 'bucket' array to count the number of values later on 
         
         // Count the number of values of each bucket, one by one
-        for(int i = 0; i < n; i++)
+        for(int i = 0; (++num_Comp) && (i < n); i++)
             bucket[(a[i]/weight) % base]++;
 
         // Count the number of values that have been listed in the buckets
-        for(int i = 0; i < base; i++)
+        for(int i = 0; (++num_Comp) && (i < base); i++)
             bucket[i] = bucket[i] + bucket[i-1];
 
         // Putting values into buckets (bucket[i] loops because bucket[i] = n, the number of values in array a.)
-        for(int i = n - 1; i >= 0; i--)
+        for(int i = n - 1; (++num_Comp) && (i >= 0); i--)
         {
             bucket[(a[i]/weight) % base]--;
             p[bucket[(a[i]/weight) % base]] = a[i];
         }
         
         // Return values in each bucket back to array a, one by one
-        for(int i = 0; i < n; i++)
+        for(int i = 0; (++num_Comp) && (i < n); i++)
             a[i] = p[i];
 
         weight  = weight * base; // Next weight 
     }
+
+    delete[] p;
 }
 //----------------------------------------------//
 //8. ShakerSort
@@ -299,19 +291,21 @@ void ShellSort(int* a, int n, long long &num_Comp)
 {
     num_Comp = 0;
 
-    int m = 3;
-    int h[] = {1, 3, 7};
-    for (int r = m - 1; r >= 0; r--)
+    // m is the quantity of values of array h (which contains the lengths of a gap between array a' values in each case)
+    int m = 3;  
+    int h[] = {1, 2, 3};
+
+    for (int r = m - 1; (++num_Comp) && (r >= 0); r--)
     {
         int k = h[r];
-        for (int i = k; i < n; i++)
+        for (int i = k; (++num_Comp) && (i < n); i++)
         {
             int x = a[i];
             int j = i - k;
             bool cont = true;
-            while ((j >= 0) && cont)
+            while ((++num_Comp) && (j >= 0) && cont)
             {
-                if (a[j] > x)
+                if ((++num_Comp) && (a[j] > x))
                 {
                     a[j + k] = a[j];
                     j = j - k;
