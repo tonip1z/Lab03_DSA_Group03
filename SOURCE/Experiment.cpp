@@ -1,17 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-#include <string>
-#include <time.h>
+#include <chrono> //we chose chrono library over time.h because it provides a high resolution clock which help measuring run time more accurate
 #include "DataGenerator.h"
 #include "SortingAlgorithms.h"
 #include "Experiment.h"
 
 using namespace std;
-
-//supporting function prototypes
-string getAlgoName(int algo_id);
-string getDataOrder(int DataOrder);
 
 //SORT_ALGO[] definition
 //SORT_ALGO[] is an array of function pointers, each points to the corresponding sorting algorithm in order as follow:
@@ -48,7 +43,6 @@ void Experiment()
     if (fout.is_open())
     {
         long long num_Comp; //used to count number of comparison operation used in an algorithm
-        clock_t start_time, end_time; //used to calculate runtime of an algorithm
         
         //for each Data Order
         for (int DataOrder = 0; DataOrder < 4; DataOrder++)
@@ -58,33 +52,66 @@ void Experiment()
             for (int size_id = 0; size_id < 6; size_id++)
             {
                 //create and generate data for a dynamic array of size DATA_SIZE[size_id] and of corresponding data order type 
-                int* a = new int[DATA_SIZE[size_id]];
-                GenerateData(a, DATA_SIZE[size_id], DataOrder);
+                int* dataSet = new int[DATA_SIZE[size_id]];
+                GenerateData(dataSet, DATA_SIZE[size_id], DataOrder);
 
                 fout << "----DATA SIZE: " << DATA_SIZE[size_id] << "\n";
-                //every sorting algorithm uses the same data set
-                //for each sorting algorithm
+                
+                //for each sorting algorithm (11 in total)
                 for (int algo_id = 0; algo_id < 11; algo_id++)
                 {
-                    //method used for getting runtime was suggested by stackoverflow user Thomas Pornin in the thread: https://stackoverflow.com/questions/5248915/execution-time-of-c-program
-                    start_time = clock();
-                    (*SORT_ALGO[algo_id])(a, DATA_SIZE[size_id], num_Comp);
-                    end_time = clock();
+                    //every sorting algorithm uses the same data set so we have to form a copy from the original set for each algorithm
+                    int* a = copyFromDataSet(dataSet, DATA_SIZE[size_id]);
 
-                    fout << "       + Algorithm: " << getAlgoName(algo_id) << "\n";
-                    fout << "               Runtime (in millisecond): " << fixed << setprecision(6) << (double(end_time - start_time)) / CLOCKS_PER_SEC * 1000 << "\n";
+                    //method used for getting runtime was refered from: https://www.geeksforgeeks.org/measure-execution-time-with-high-precision-in-c-c/
+                    auto start_time = chrono::high_resolution_clock::now();
+                    if (algo_id != 4) //mergeSort FAILED THE TEST
+                        (*SORT_ALGO[algo_id])(a, DATA_SIZE[size_id], num_Comp);
+                    auto end_time = chrono::high_resolution_clock::now();    
+
+                    double run_time_micro = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+                    double run_time_milli = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
+                    
+                    fout << "_________Algorithm: " << getAlgoName(algo_id) << "\n";
+                    fout << "               Runtime (in microseconds): " << fixed << run_time_micro << "\n";
+                    fout << "               Runtime (in milliseconds): " << fixed << run_time_milli << "\n";
                     fout << "               Comparisons: " << num_Comp << "\n";
+
+                    delete[] a;
                 }
 
-                delete[] a;
+                delete[] dataSet;
             }
         }
         fout.close();
     }
     else
         cout << "Cannot open 'ExperimentResult.txt'.\n";
+}
 
-    
+//This TestAlgorithm() function is used to test the correctness of the implementation for each algorithm 
+//(ie. the sort result is in ascending order or not)
+//This test function uses data set of 100 elements
+//return true if the implementation PASSED the test, otherwise return false - the implementation FAILED the test
+bool TestAlgorithm(int algo_id)
+{
+    int* testDataSet = new int[100];
+    long long num_Comp;
+    bool PASSED = true;
+
+    GenerateRandomData(testDataSet, 100);
+
+    (*SORT_ALGO[algo_id])(testDataSet, 100, num_Comp);
+
+    for (int i = 1; i < 100; i++)
+        if (testDataSet[i] < testDataSet[i - 1])
+        {
+            PASSED = false;
+            break;
+        }
+
+    delete[] testDataSet;
+    return PASSED;
 }
 
 string getAlgoName(int algo_id)
@@ -150,4 +177,13 @@ string getDataOrder(int DataOrder)
             return "invalid DataOrder_id";
             break;
     }
+}
+
+int* copyFromDataSet(int* a, int size)
+{
+    int* newDataSet = new int[size];
+    for (int i = 0; i < size; i++)
+        newDataSet[i] = a[i];
+
+    return newDataSet;
 }
