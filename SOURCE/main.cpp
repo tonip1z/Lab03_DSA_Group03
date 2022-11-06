@@ -9,7 +9,7 @@ int main()
 {
 	//testing sorting algorithms
 	//if you wanna test your sorting functions do it right here
-	/*
+	
 	for (int algo_id = 0; algo_id < 11; algo_id++)
 	{
 		cout << getAlgoName(algo_id) << ": ";
@@ -18,7 +18,7 @@ int main()
 		else
 			cout << "FAILED\n";
 	}
-	*/
+	
 	Experiment();
 	return 0;
 }

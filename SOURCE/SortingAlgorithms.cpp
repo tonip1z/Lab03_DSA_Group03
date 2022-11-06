@@ -29,7 +29,7 @@ void SelectionSort(int* a, int n, long long &num_Comp)
     for (int i = 0; (++num_Comp) && (i < n - 1); i++)
     {
         int k_min = i;
-        for (int j = i + 1; j < n; j++)
+        for (int j = i + 1; (++num_Comp) && (j < n); j++)
             if ((++num_Comp) && (a[k_min] > a[j]))
                 k_min = j;
         swap(a[i], a[k_min]);
@@ -42,11 +42,11 @@ void InsertionSort(int* a, int n, long long &num_Comp)
 {
     num_Comp = 0;
 	int i, j, key;
-	for (i = 1; i < n; i++)
+	for (i = 1; (++num_Comp) && (i < n); i++)
 	{
 		key = a[i];
 		j = i - 1;
-		while (j >= 0 && a[j] > key)
+		while ((++num_Comp) && (j >= 0) && (++num_Comp) && (a[j] > key)) //if (a[i] > key) is false, still count the comparison itself, although this is compiler dependent
 		{
 			swap(a[j], a[j + 1]);
 			j = j - 1;
@@ -61,7 +61,7 @@ void BubbleSort(int* a, int n, long long &num_Comp)
 {
     num_Comp = 0;
     for (int i = 0; (++num_Comp) && (i < n - 1); i++)
-        for (int j = n - 1; j > i; j--)
+        for (int j = n - 1; (++num_Comp) && (j > i); j--)
             if ((++num_Comp) && (a[j] < a[j - 1]))
                 swap(a[j], a[j - 1]);
 }
@@ -90,14 +90,14 @@ void BubbleSort_with_flag(int* a, int n, long long &num_Comp)
 //4. HeapSort
 void HeapRebuild(int index, int* a, int n, long long &num_Comp)
 {
-	int  max = index;
+	int max = index;
 	int j = 2 * max + 1;
 	int k = 2 * max + 2;
-	if (j<=n&&a[max] < a[j])
+	if ((++num_Comp) && (j <= n) && (++num_Comp) && (a[max] < a[j]))
 		max = j;
-	if (k<=n&&a[max] < a[k])
+	if ((++num_Comp) && (k <= n) && (++num_Comp) && (a[max] < a[k]))
 		max = k;
-	if (max != index)
+	if ((++num_Comp) && (max != index))
 	{
 		swap(a[index], a[max]);
 		HeapRebuild(max, a, n, num_Comp);
@@ -107,7 +107,7 @@ void HeapRebuild(int index, int* a, int n, long long &num_Comp)
 void HeapConstruct(int* a, int n, long long &num_Comp)
 {
 	int index;
-	for(index = n / 2 - 1; index >= 0; index--)
+	for(index = n / 2 - 1; (++num_Comp) && (index >= 0); index--)
 	{
 		HeapRebuild(index, a, n, num_Comp);
 	}
@@ -118,7 +118,7 @@ void HeapSort(int* a, int n, long long &num_Comp)
     num_Comp = 0;
 	HeapConstruct(a, n, num_Comp);
 	int m = n - 1;
-	while (m > 0)
+	while ((++num_Comp) && (m > 0))
 	{
 		swap(a[0], a[m]);
 		m = m - 1;
@@ -171,11 +171,11 @@ void MergeRun(int* a, int temp[], int p, int t, int q, long long &num_Comp)
     }
 }
 
-void Sort_on_Run(int* a, int temp[],int p, int q, long long &num_Comp)
+void Sort_on_Run(int* a, int temp[], int p, int q, long long &num_Comp)
 {
     if ((++num_Comp) && (p < q))
     {
-        int k = (p + q)/2; // Choosing pivot at the middle of array a
+        int k = (p + q) / 2; // Choosing pivot at the middle of array a
         Sort_on_Run(a, temp, p, k, num_Comp);
         Sort_on_Run(a, temp, k + 1, q, num_Comp);
         MergeRun(a, temp, p, k + 1, q, num_Comp);
@@ -190,13 +190,49 @@ void MergeSort(int* a, int n, long long &num_Comp)
     delete[] temp;
 }
 
-
 //----------------------------------------------//
 //6. QuickSort
+int Partition(int* a, int left, int right, long long &num_Comp) //Return the pivot position while arranging all the elements to their correct sub-array
+{			
+	int pivot = a[left];
+	int i = left - 1, j = right;
+
+	do 
+    {
+        do 
+            ++i;
+		while ((++num_Comp) && (a[i] < pivot));
+        
+        do
+            --j;
+		while ((++num_Comp) && (a[j] > pivot)); 
+        
+		swap(a[i], a[j]);
+	} while ((++num_Comp) && (i < j));
+
+	if ((++num_Comp) && (i > j)) 
+        swap(a[i], a[j]);
+
+	return j;
+}
+
+
+void QS_Recursion(int* a, int left, int right, long long &num_Comp) 
+{
+	if ((++num_Comp) && (right - left <= 1))
+		return;
+
+	int SplitPoint = Partition(a, left, right, num_Comp);
+
+	QS_Recursion(a, left, SplitPoint + 1, num_Comp);
+	QS_Recursion(a, SplitPoint + 1, right, num_Comp);
+}
+
 void QuickSort(int* a, int n, long long &num_Comp)
 {
-    //temporary for testing
     num_Comp = 0;
+    //we have to seperate the function itself to match the function pointer format
+    QS_Recursion(a, 0, n, num_Comp);
 }
 
 //----------------------------------------------//
@@ -224,17 +260,17 @@ void RadixSort(int* a, int n, long long &num_Comp)
         
         // Count the number of values of each bucket, one by one
         for(int i = 0; (++num_Comp) && (i < n); i++)
-            bucket[(a[i]/weight) % base]++;
+            bucket[(a[i] / weight) % base]++;
 
         // Count the number of values that have been listed in the buckets
         for(int i = 1; (++num_Comp) && (i < base); i++)
-            bucket[i] += bucket[i-1];
+            bucket[i] += bucket[i - 1];
         
         // Putting values into buckets (bucket[i] loops because bucket[i] = n, the number of values in array a)
         for(int i = n - 1; (++num_Comp) && (i >= 0); i--)
         {
-            bucket[(a[i]/weight) % base]--;
-            p[bucket[(a[i]/weight) % base]] = a[i];
+            bucket[(a[i] / weight) % base]--;
+            p[bucket[(a[i] / weight) % base]] = a[i];
         }
 
         // Return values in each bucket back to array a, one by one
@@ -255,13 +291,13 @@ void ShakerSort(int* a, int n, long long &num_Comp)
 	int left = 0;
 	int right = n;
 
-	while (++num_Comp && left < right)
+	while ((++num_Comp) && (left < right))
 	{
 		bool sorted = true;
 		right--;
-		for (int i = left; ++num_Comp && i < right - 1; i++)
+		for (int i = left; (++num_Comp) && (i < right); i++)
 		{
-			if (++num_Comp && a[i] > a[i + 1])
+			if ((++num_Comp) && (a[i] > a[i + 1]))
 			{
 				int tmp = a[i];
 				a[i] = a[i + 1];
@@ -269,12 +305,15 @@ void ShakerSort(int* a, int n, long long &num_Comp)
 				sorted = false;
 			}
 		}
-		if (++num_Comp && sorted) break;
+
+		if ((++num_Comp) && (sorted)) 
+            break;
+
 		left++;
 		sorted = true;
-		for (int i = right - 1; ++num_Comp && i >= left; i--)
+		for (int i = right - 1; (++num_Comp) && (i >= left); i--)
 		{
-			if (++num_Comp && a[i] < a[i - 1])
+			if ((++num_Comp) && (a[i] < a[i - 1]))
 			{
 				int tmp = a[i];
 				a[i] = a[i - 1];
@@ -282,7 +321,9 @@ void ShakerSort(int* a, int n, long long &num_Comp)
 				sorted = false;
 			}
 		}
-		if (++num_Comp && sorted) break;
+        
+		if ((++num_Comp) && (sorted)) 
+            break;
 	}
 }
 
@@ -311,7 +352,8 @@ void ShellSort(int* a, int n, long long &num_Comp)
                     a[j + k] = a[j];
                     j = j - k;
                 }
-                else cont = false;
+                else 
+                    cont = false;
                 a[j + k] = x;
             }
         }
@@ -328,34 +370,34 @@ void CountingSort(int* a, int n, long long &num_Comp)
     int* tmp = new int[n];             
     int count[MAX_VAL] = { 0 };       
 
-    for (int i = 0; ++num_Comp && i < n; i++) {
+    for (int i = 0; (++num_Comp) && (i < n); i++) 
         ++count[a[i]];
-    }
-    
-    for (int i = 1; ++num_Comp && i < MAX_VAL; i++) {
+       
+    for (int i = 1; (++num_Comp) && (i < MAX_VAL); i++)
         count[i] += count[i - 1];
-    }
-
-    for (int i = 0; ++num_Comp && i < n; i++) {
+    
+    for (int i = 0; (++num_Comp) && (i < n); i++) 
+    {
         tmp[count[a[i]] - 1] = a[i];
         --count[a[i]];
     }
 
-    for (int i = 0; ++num_Comp && i < n; i++) {
+    for (int i = 0; (++num_Comp) && (i < n); i++) 
         a[i] = tmp[i];
-    }
 }
 
 //----------------------------------------------//
 //11. FlashSort
 void FlashInsertionSort(int* a, int n, long long &num_Comp)
 {
-	for (int i = 1; ++num_Comp && i < n; ++i) {
+	for (int i = 1; (++num_Comp) && (i < n); ++i) 
+    {
 		int currentValue = a[i];
 		int j;
 
-		for (j = i; ++num_Comp && j > 0; --j) {
-			if (++num_Comp && a[j - 1] <= currentValue)
+		for (j = i; (++num_Comp) && (j > 0); --j) 
+        {
+			if ((++num_Comp) && (a[j - 1] <= currentValue))
 				break;
 			a[j] = a[j - 1];
 		}
@@ -377,14 +419,17 @@ void ClassPermute(int* a, int n, int minValue, int maxValue, int freq[], int m, 
 	int foo;
 	int bar;
 
-	while (++num_Comp && num_Move <= n) {
-		while (++num_Comp && i > freq[k] - 1) {
+	while ((++num_Comp) && (num_Move <= n)) 
+    {
+		while ((++num_Comp) && (i > freq[k] - 1)) 
+        {
 			i++;
 			k = GetClass(a[i], minValue, maxValue, m, num_Comp);
 		}
 
 		foo = a[i];
-		while (++num_Comp && i <= freq[k] - 1) {
+		while ((++num_Comp) && (i <= freq[k] - 1)) 
+        {
 			k = GetClass(foo, minValue, maxValue, m, num_Comp);
 
 			bar = a[--freq[k]];
@@ -398,7 +443,7 @@ void ClassPermute(int* a, int n, int minValue, int maxValue, int freq[], int m, 
 
 void ClassSort(int* a, int n, int freq[], int m, long long &num_Comp)
 {
-	for (int k = 2; ++num_Comp && k <= m; ++k)
+	for (int k = 2; (++num_Comp) && (k <= m); ++k)
 	{
 		FlashInsertionSort(a + freq[k - 1], freq[k] - freq[k - 1], num_Comp);
 	}
@@ -409,18 +454,19 @@ void Classify(int* a, int n, int& minValue, int& maxValue, int freq[], int m, lo
 	minValue = a[0];
 	maxValue = a[0];
 
-	for (int i = 1; ++num_Comp && i < n; ++i) {
-		if (++num_Comp && a[i] < minValue)
+	for (int i = 1; (++num_Comp) && (i < n); ++i) 
+    {
+		if ((++num_Comp) && (a[i] < minValue))
 			minValue = a[i];
 
-		if (++num_Comp && a[i] > maxValue)
+		if ((++num_Comp) && (a[i] > maxValue))
 			maxValue = a[i];
 	}
 
-	for (int i = 0; ++num_Comp && i < n; ++i)
+	for (int i = 0; (++num_Comp) && (i < n); ++i)
 		++freq[GetClass(a[i], minValue, maxValue, m, num_Comp)];
 
-	for (int i = 1; ++num_Comp && i <= m; ++i)
+	for (int i = 1; (++num_Comp) && (i <= m); ++i)
 		freq[i] += freq[i - 1];
 }
 
@@ -432,10 +478,10 @@ void FlashSort(int* a, int n, long long &num_Comp)
 
 	int* L = new int[m + 1];
 
-	for (int i = 0; ++num_Comp && i <= m; i++)
+	for (int i = 0; (++num_Comp) && (i <= m); i++)
 		L[i] = 0;
 
-	if (!L)
+	if ((++num_Comp) && (!L))
 		return;
 
 	int minValue, maxValue;

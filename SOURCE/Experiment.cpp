@@ -43,14 +43,13 @@ void Experiment()
     if (fout.is_open())
     {
         long long num_Comp; //used to count number of comparison operation used in an algorithm
-        time_t start_time, end_time; //used to calculate runtime of an algorithm
         
         //for each Data Order
-        for (int DataOrder = 0; DataOrder < 1; DataOrder++)
+        for (int DataOrder = 0; DataOrder < 4; DataOrder++)
         {
             fout << "\nDATA ORDER: " << getDataOrder(DataOrder) << "\n";
             //for each Data Size
-            for (int size_id = 0; size_id < 2; size_id++)
+            for (int size_id = 0; size_id < 6; size_id++)
             {
                 //create and generate data for a dynamic array of size DATA_SIZE[size_id] and of corresponding data order type 
                 int* dataSet = new int[DATA_SIZE[size_id]];
@@ -64,11 +63,10 @@ void Experiment()
                     //every sorting algorithm uses the same data set so we have to form a copy from the original set for each algorithm
                     int* a = copyFromDataSet(dataSet, DATA_SIZE[size_id]);
 
-                    //method used for getting runtime refer to: https://www.geeksforgeeks.org/measure-execution-time-with-high-precision-in-c-c/
+                    //method used for getting runtime was refered from: https://www.geeksforgeeks.org/measure-execution-time-with-high-precision-in-c-c/
                     auto start_time = chrono::high_resolution_clock::now();
-                    
-                    (*SORT_ALGO[algo_id])(a, DATA_SIZE[size_id], num_Comp);
-                    
+                    if (algo_id != 4) //mergeSort FAILED THE TEST
+                        (*SORT_ALGO[algo_id])(a, DATA_SIZE[size_id], num_Comp);
                     auto end_time = chrono::high_resolution_clock::now();    
 
                     double run_time_micro = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
@@ -89,8 +87,6 @@ void Experiment()
     }
     else
         cout << "Cannot open 'ExperimentResult.txt'.\n";
-
-    
 }
 
 //This TestAlgorithm() function is used to test the correctness of the implementation for each algorithm 
