@@ -204,6 +204,7 @@ void QuickSort(int* a, int n, long long &num_Comp)
 // Least Significant Decimal Radix Sort
 void RadixSort(int* a, int n, long long &num_Comp)
 {
+    cout << "got to the beginning of radix sort\n";
     num_Comp = 0;
 
     const int base = 10;     // Number of "buckets" = 10
@@ -243,6 +244,7 @@ void RadixSort(int* a, int n, long long &num_Comp)
         weight  = weight * base; // Next weight 
     }
 
+    cout << "got to the end of radix sort\n";
     delete[] p;
 }
 //----------------------------------------------//

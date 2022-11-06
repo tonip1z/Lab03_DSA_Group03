@@ -40,9 +40,6 @@ void Experiment()
     //The experiment result will be exported to the file "ExperimentResult.txt" in the project directory
     ofstream fout;
     fout.open("ExperimentResult.txt");
-
-    fout << "file test.\n";
-
     if (fout.is_open())
     {
         long long num_Comp; //used to count number of comparison operation used in an algorithm
@@ -88,6 +85,31 @@ void Experiment()
         cout << "Cannot open 'ExperimentResult.txt'.\n";
 
     
+}
+
+//This TestAlgorithm() function is used to test the correctness of the implementation for each algorithm 
+//(ie. the sort result is in ascending order or not)
+//This test function uses data set of 100 elements
+//return true if the implementation PASSED the test, otherwise return false - the implementation FAILED the test
+bool TestAlgorithm(int algo_id)
+{
+    int* testDataSet = new int[100];
+    long long num_Comp;
+    bool PASSED = true;
+
+    GenerateRandomData(testDataSet, 100);
+
+    (*SORT_ALGO[algo_id])(testDataSet, 100, num_Comp);
+
+    for (int i = 1; i < 100; i++)
+        if (testDataSet[i] < testDataSet[i - 1])
+        {
+            PASSED = false;
+            break;
+        }
+
+    delete[] testDataSet;
+    return PASSED;
 }
 
 string getAlgoName(int algo_id)
