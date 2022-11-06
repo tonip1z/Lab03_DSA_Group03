@@ -72,7 +72,7 @@ void Experiment()
                     double run_time_micro = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
                     double run_time_milli = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
                     
-                    fout << "       + Algorithm: " << getAlgoName(algo_id) << "\n";
+                    fout << "_________Algorithm: " << getAlgoName(algo_id) << "\n";
                     fout << "               Runtime (in microseconds): " << fixed << run_time_micro << "\n";
                     fout << "               Runtime (in milliseconds): " << fixed << run_time_milli << "\n";
                     fout << "               Comparisons: " << num_Comp << "\n";
