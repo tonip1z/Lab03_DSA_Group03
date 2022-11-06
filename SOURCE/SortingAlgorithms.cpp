@@ -262,13 +262,13 @@ void ShakerSort(int* a, int n, long long &num_Comp)
 	int left = 0;
 	int right = n;
 
-	while (left < right)
+	while (++num_Comp && left < right)
 	{
 		bool sorted = true;
 		right--;
-		for (int i = left; i < right - 1; i++)
+		for (int i = left; ++num_Comp && i < right - 1; i++)
 		{
-			if (a[i] > a[i + 1])
+			if (++num_Comp && a[i] > a[i + 1])
 			{
 				int tmp = a[i];
 				a[i] = a[i + 1];
@@ -279,9 +279,9 @@ void ShakerSort(int* a, int n, long long &num_Comp)
 		if (sorted) break;
 		left++;
 		sorted = true;
-		for (int i = right - 1; i >= left; i--)
+		for (int i = right - 1; ++num_Comp && i >= left; i--)
 		{
-			if (a[i] < a[i - 1])
+			if (++num_Comp && a[i] < a[i - 1])
 			{
 				int tmp = a[i];
 				a[i] = a[i - 1];
@@ -333,20 +333,20 @@ void CountingSort(int* a, int n, long long &num_Comp)
     int* tmp = new int[n];             
     int count[MAX_VAL] = { 0 };       
 
-    for (int i = 0; i < n; i++, num_Comp++) {
+    for (int i = 0; ++num_Comp && i < n; i++) {
         ++count[a[i]];
     }
     
-    for (int i = 1; i < MAX_VAL; i++, num_Comp++) {
+    for (int i = 1; ++num_Comp && i < MAX_VAL; i++) {
         count[i] += count[i - 1];
     }
 
-    for (int i = 0; i < n; i++, num_Comp++) {
+    for (int i = 0; ++num_Comp && i < n; i++) {
         tmp[count[a[i]] - 1] = a[i];
         --count[a[i]];
     }
 
-    for (int i = 0; i < n; i++, num_Comp++) {
+    for (int i = 0; ++num_Comp && i < n; i++) {
         a[i] = tmp[i];
     }
 }
