@@ -176,7 +176,7 @@ void MergeRun(int* a, int temp[], int p, int t, int q, long long &num_Comp)
     }
 
     // Print all values from array temp back to array a
-    for (int r = 0; r < m; r++)
+    for (int r = 0; (++num_Comp) && (r < m); r++)
         a[p + r] = temp[r];
 }
 
