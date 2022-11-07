@@ -65,8 +65,7 @@ void Experiment()
 
                     //method used for getting runtime was refered from: https://www.geeksforgeeks.org/measure-execution-time-with-high-precision-in-c-c/
                     auto start_time = chrono::high_resolution_clock::now();
-                    if (algo_id != 4) //mergeSort FAILED THE TEST
-                        (*SORT_ALGO[algo_id])(a, DATA_SIZE[size_id], num_Comp);
+                    (*SORT_ALGO[algo_id])(a, DATA_SIZE[size_id], num_Comp);
                     auto end_time = chrono::high_resolution_clock::now();    
 
                     double run_time_micro = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
