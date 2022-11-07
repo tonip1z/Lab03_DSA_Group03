@@ -204,7 +204,12 @@ int main(int argc, char** argv)
 				cout << "FAILED\n";
 		}
 	}
-	else 
+	else if (strcmp(argv[1], "-e") == 0)
+	{
+		cout << "EXPERIMENT MODE\n\n";
+		Experiment();
+	}
+	else
 	{
 		cout << "Invalid mode selection.\n";
 		return 1;
