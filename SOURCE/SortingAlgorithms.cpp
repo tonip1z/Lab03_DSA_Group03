@@ -33,7 +33,7 @@ void SelectionSort(int* a, int n, long long &num_Comp)
     for (int i = 0; (++num_Comp) && (i < n - 1); i++)
     {
         int k_min = i;
-        for (int j = i + 1; j < n; j++)
+        for (int j = i + 1; (++num_Comp) && (j < n); j++)
             if ((++num_Comp) && (a[k_min] > a[j]))      //find the smallest value 
                 k_min = j;
         swap(a[i], a[k_min]);
