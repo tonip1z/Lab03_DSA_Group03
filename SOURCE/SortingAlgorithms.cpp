@@ -23,6 +23,10 @@ using namespace std;
 //Implementation goes here, write code in corresponding section for each algorithm
 //----------------------------------------------//
 //1. SelectionSort
+// In Selection Sort, we will have an array unsorted or nearly sorted. The idea of this is to find the smallest 
+// value (for the ascended array) or the largest value (for the descended array) and put it into the first position 
+// of the part of the array we need to sort. This process continues until the array is fully sorted.
+
 void SelectionSort(int* a, int n, long long &num_Comp) 
 {
     num_Comp = 0;
@@ -30,7 +34,7 @@ void SelectionSort(int* a, int n, long long &num_Comp)
     {
         int k_min = i;
         for (int j = i + 1; j < n; j++)
-            if ((++num_Comp) && (a[k_min] > a[j]))
+            if ((++num_Comp) && (a[k_min] > a[j]))      //find the smallest value 
                 k_min = j;
         swap(a[i], a[k_min]);
     }
@@ -57,6 +61,7 @@ void InsertionSort(int* a, int n, long long &num_Comp)
 
 //----------------------------------------------//
 //3. BubbleSort
+
 void BubbleSort(int* a, int n, long long &num_Comp)
 {
     num_Comp = 0;
@@ -133,7 +138,7 @@ void HeapSort(int* a, int n, long long &num_Comp)
 // This is a flexible merge sort, can be used to sort all values in array a or part of it, just by changing the range p and q.
 
 //The arguments contain array a (unsorted), array temp to store the answer, begin, pivot, end (of the sorting range).
-// Using the pivot, array has splitted into two runs: the first half and the second half of the original array. 
+// Using the pivot, array a has been splitted into two runs: the first half and the second half of the original array. 
 void MergeRun(int* a, int temp[], int p, int t, int q, long long &num_Comp)     
 {
     int m = 0;      // starting point of array temp
@@ -169,6 +174,10 @@ void MergeRun(int* a, int temp[], int p, int t, int q, long long &num_Comp)
         temp[m] = a[r];
         m++;
     }
+
+    // Print all values from array temp back to array a
+    for (int r = 0; r < m; r++)
+        a[p + r] = temp[r];
 }
 
 void Sort_on_Run(int* a, int temp[],int p, int q, long long &num_Comp)
