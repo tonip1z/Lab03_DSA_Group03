@@ -6,8 +6,10 @@
 
 using namespace std;
 
+//Command line argument implementation was refered from: https://www.geeksforgeeks.org/command-line-arguments-in-c-cpp/
 int main(int argc, char** argv)
 {
+	//for a better visualization of how we implemented this code, please visit: Command line implementation routing tree in "report.pdf"
 	if (strcmp(argv[1], "-a") == 0)
 	{
 		cout << "ALGORITHM MODE\n";
@@ -16,8 +18,98 @@ int main(int argc, char** argv)
 		{
 			if (isValidAlgorithmName(argv[2]))
 			{
-				//cout << "Valid algorithm name.\n";
-				
+				if (isMeantToBeGivenInputFile(argv[3]))
+				{
+					if (argc == 5) //if there is still 1 more argument passed in, check if this is [Output parameter(s)]
+					{
+						if (isMeantToBeOutputParam(argv[4]))
+						{
+							//All conditions met. Execute command 1 with ouput parameter
+							Command_1(argv[2], argv[3], argv[4]);
+						}
+						else
+						{
+							cout << "Unregconized or was wrongly formatted 4th argument. Please enter [Output parameter(s)] or leave blank (for command 1).\n";
+							return 1;
+						}
+					}
+					else
+					{
+						//Execute command 1 without output parameter
+						char* dummy = new char[4];
+						strcpy(dummy, "-no");
+
+						Command_1(argv[2], argv[3], dummy);
+
+						delete dummy;
+					}
+				}
+				else if (isMeantToBeInputSize(argv[3]))
+				{
+					int size = getSize(argv[3]);
+					if (isValidInputSize(size))
+					{
+						if (argc == 4) //i.e no more argument was passed in, this means that we have to run command 3 with no output parameter
+						{
+							//Execute command 3 without output parameter
+							char* dummy = new char[4];
+							strcpy(dummy, "-no");
+
+							Command_3(argv[2], size, dummy);
+
+							delete dummy;
+						}
+						else if (argc > 4)
+						{
+							if (isMeantToBeInputOrder(argv[4]))
+							{
+								if (argc == 6) //if there is still 1 more argument passed in, check if this is [Output parameter(s)]
+								{
+									if (isMeantToBeOutputParam(argv[5]))
+									{
+										//All conditions met. Execute command 2 with output parameter
+										Command_2(argv[2], size, argv[4], argv[5]);
+									}
+									else
+									{
+										cout << "Unregconized or was wrongly formatted 5th argument. Please enter [Output parameter(s)] or leave blank (for command 2).\n";
+										return 1;
+									}
+								}
+								else 
+								{
+									//Execute command 2 without output parameter
+									char* dummy = new char[4];
+									strcpy(dummy, "-no");
+
+									Command_2(argv[2], size, argv[4], dummy);
+
+									delete dummy;
+								}
+							}
+							else if (isMeantToBeOutputParam(argv[4])) //i.e run command 3 with output parameter
+							{
+								//Execute command 3 with output parameter
+								Command_3(argv[2], size, argv[4]);
+							}
+							else
+							{
+								cout << "Unregconized or was wrongly formatted 4th argument. Please enter either [Input order] (for command 2) or [Output parameter(s)/leave blank] (for command 3).\n";
+								return 1;
+							}
+						}
+					}
+					else
+					{
+						cout << "Invalid input size. Please enter a integer ranging from 1 to 1,000,000.\n";
+						return 1;
+					}
+				}
+				else
+				{
+					cout << "Unregconized or was wrongly formatted 3rd argument. Please enter either [Given input] (for command 1) or [Input size] (for command 2).\n";
+					return 1;
+				}
 			}
 			else
 			{

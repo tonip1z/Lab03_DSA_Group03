@@ -114,6 +114,116 @@ bool TestAlgorithm(int algo_id)
     return PASSED;
 }
 
+//Command line function definitions
+void Command_1(char* algo_name, char* input_filename, char* output_param)
+{
+    int algo_id = getAlgoId(algo_name);
+
+    cout << "Algorithm: " << getAlgoName(algo_id) << "\n";
+    cout << "Input file: " << input_filename << "\n";
+
+    ifstream fin;
+    fin.open(input_filename);
+    if (fin.is_open())
+    {
+        int n;
+        int* a;
+        long long num_Comp;
+
+        fin >> n;
+        cout << "Input size: " << n << "\n";
+        cout << "-------------------------\n";
+        a = new int[n];
+
+        for (int i = 0; i < n; i++)
+            fin >> a[i];
+
+        auto start_time = chrono::high_resolution_clock::now();
+        (*SORT_ALGO[algo_id])(a, n, num_Comp);
+        auto end_time = chrono::high_resolution_clock::now();
+
+        if (strcmp(output_param, "-both") == 0)
+        {
+            double time_taken_micro = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+            cout << "Running time: " << fixed << setprecision(5) << time_taken_micro / 1000 << " ms\n";
+            cout << "Comparisons: " << num_Comp << "\n";
+        }
+        else if (strcmp(output_param, "-time") == 0)
+        {
+            double time_taken_micro = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+            cout << "Running time: " << fixed << setprecision(5) << time_taken_micro / 1000 << " ms\n";
+        }
+        else if (strcmp(output_param, "-comp") == 0)
+        {
+            cout << "Comparisons: " << num_Comp << "\n";
+        }
+
+        cout << "\n";
+
+        delete[] a;
+        fin.close();
+    }
+    else
+        cout << "Cannot open '" << input_filename << "'.\n";
+}
+
+void Command_2(char* algo_name, int size, char* input_order, char* output_param)
+{
+    int algo_id = getAlgoId(algo_name);
+
+    cout << "Algorithm: " << getAlgoName(algo_id) << "\n";
+    cout << "Input size: " << size << "\n";
+    cout << "Input order: " << getInputOrder(input_order) << "\n";
+    cout << "-------------------------\n";
+
+    int* a = new int[size];
+    long long num_Comp;
+
+    if (strcmp(input_order, "-rand") == 0)
+        GenerateRandomData(a, size);
+    else if (strcmp(input_order, "-sorted") == 0)
+        GenerateSortedData(a, size);
+    else if (strcmp(input_order, "-nsorted") == 0)
+        GenerateNearlySortedData(a, size);
+    else if (strcmp(input_order, "-rev") == 0)
+        GenerateReverseData(a, size);
+    
+    auto start_time = chrono::high_resolution_clock::now();
+    (*SORT_ALGO[algo_id])(a, size, num_Comp);
+    auto end_time = chrono::high_resolution_clock::now();
+
+    if (strcmp(output_param, "-both") == 0)
+    {
+        double time_taken_micro = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+        cout << "Running time: " << fixed << setprecision(5) << time_taken_micro / 1000 << " ms\n";
+        cout << "Comparisons: " << num_Comp << "\n";
+    }
+    else if (strcmp(output_param, "-time") == 0)
+    {
+        double time_taken_micro = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+        cout << "Running time: " << fixed << setprecision(5) << time_taken_micro / 1000 << " ms\n";
+    }
+    else if (strcmp(output_param, "-comp") == 0)
+        cout << "Comparisons: " << num_Comp << "\n";
+    
+    cout << "\n";
+    delete[] a;
+}
+
+void Command_3(char* algo_name, int size, char* output_param)
+{
+    int algo_id = getAlgoId(algo_name);
+
+    cout << "Algorithm: " << getAlgoName(algo_id) << "\n";
+    cout << "Input size: " << size << "\n\n";
+    
+    Command_3_InputOrder(algo_id, size, 0, output_param); //Input order: Randomized
+    Command_3_InputOrder(algo_id, size, 3, output_param); //Input order: Nearly sorted
+    Command_3_InputOrder(algo_id, size, 1, output_param); //Input order: Sorted
+    Command_3_InputOrder(algo_id, size, 2, output_param); //Input order: Reversely sorted
+}
+
+//support function for testing/executing command lines
 string getAlgoName(int algo_id)
 {
     switch (algo_id)
@@ -188,6 +298,99 @@ int* copyFromDataSet(int* a, int size)
     return newDataSet;
 }
 
+int getAlgoId(char* algo_name)
+{
+    if (strcmp(algo_name, "selection-sort") == 0)
+        return 0;
+    if (strcmp(algo_name, "insertion-sort") == 0)
+        return 1;
+    if (strcmp(algo_name, "bubble-sort") == 0)
+        return 2;
+    if (strcmp(algo_name, "heap-sort") == 0)
+        return 3;
+    if (strcmp(algo_name, "merge-sort") == 0)
+        return 4;
+    if (strcmp(algo_name, "quick-sort") == 0)
+        return 5;
+    if (strcmp(algo_name, "radix-sort") == 0)
+        return 6;
+    if (strcmp(algo_name, "shaker-sort") == 0)
+        return 7;
+    if (strcmp(algo_name, "shell-sort") == 0)
+        return 8;
+    if (strcmp(algo_name, "counting-sort") == 0)
+        return 9;
+    if (strcmp(algo_name, "flash-sort") == 0)
+        return 10;
+    
+    return -1;
+}
+
+string getInputOrder(char* input_order)
+{
+    if (strcmp(input_order, "-rand") == 0)
+        return "Randomized";
+    
+    if (strcmp(input_order, "-sorted") == 0)
+        return "Sorted";
+
+    if (strcmp(input_order, "-nsorted") == 0)
+        return "Nearly sorted";
+    
+    if (strcmp(input_order, "-rev") == 0)
+        return "Reversely sorted";
+
+    return "invalid input order";
+}
+
+string getInputOrder(int input_order)
+{
+    if (input_order == 0)
+        return "Randomized";
+    
+    if (input_order == 1)
+        return "Sorted";
+
+    if (input_order == 2)
+        return "Reversely sorted";
+
+    if (input_order == 3)
+        return "Nearly sorted";
+    return "invalid input order";
+}
+
+void Command_3_InputOrder(int algo_id, int size, int input_order, char* output_param)
+{
+    cout << "Input order: " << getInputOrder(input_order) << "\n";
+    cout << "-------------------------\n";
+
+    int* a = new int[size];
+    long long num_Comp;
+
+    GenerateData(a, size, input_order);
+    
+    auto start_time = chrono::high_resolution_clock::now();
+    (*SORT_ALGO[algo_id])(a, size, num_Comp);
+    auto end_time = chrono::high_resolution_clock::now();
+
+    if (strcmp(output_param, "-both") == 0)
+    {
+        double time_taken_micro = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+        cout << "Running time: " << fixed << setprecision(5) << time_taken_micro / 1000 << " ms\n";
+        cout << "Comparisons: " << num_Comp << "\n";
+    }
+    else if (strcmp(output_param, "-time") == 0)
+    {
+        double time_taken_micro = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+        cout << "Running time: " << fixed << setprecision(5) << time_taken_micro / 1000 << " ms\n";
+    }
+    else if (strcmp(output_param, "-comp") == 0)
+        cout << "Comparisons: " << num_Comp << "\n";
+    
+    cout << "\n";
+    delete[] a;
+}
+
 //the functions below are for the purpose of condition checking with command line arguments
 bool isValidAlgorithmName(char* algo_name)
 {
@@ -229,7 +432,7 @@ bool isMeantToBeAlgorithmName(char* algo_name)
 
 bool isMeantToBeGivenInputFile(char* filename)
 {
-    return (endingWithdotTxt) && (noIllegalCharacterInFileName);
+    return ((endingWithdotTxt(filename)) && (noIllegalCharacterInFileName(filename)));
 }
 
 bool endingWithdotTxt(char* filename)
@@ -257,8 +460,64 @@ bool isMeantToBeInputSize(char* filename)
 {
     int len = strlen(filename);
 
-    for (int i = 0; i < len; i++)
+    if ((int(filename[0]) < 49) || (int(filename[0]) > 57)) //i.e the first "supposedly digit" is not in the range 1 to 9
+        return false;
+
+    for (int i = 1; i < len; i++)
     {
-        
+        if ((int(filename[i]) < 48) || (int(filename[i]) > 57)) //i.e the character is not a digit in the range of 0 to 9
+            return false;
     }
+
+    return true;
+}
+
+int getSize(char* input_size)
+{
+    int size = int(input_size[0]) - 48;
+    int len = strlen(input_size);
+
+    for (int i = 1; i < len; i++)
+        size = size * 10 + (int(input_size[i]) - 48);
+
+    return size;
+}
+
+bool isValidInputSize(int size)
+{
+    if ((size >= 1) && (size <= 1000000))
+        return true;
+    
+    return false;
+}
+
+bool isMeantToBeOutputParam(char* output_param)
+{
+    if (strcmp(output_param, "-time") == 0)
+        return true;
+    
+    if (strcmp(output_param, "-comp") == 0)
+        return true;
+
+    if (strcmp(output_param, "-both") == 0)
+        return true;
+
+    return false;
+}
+
+bool isMeantToBeInputOrder(char* input_order)
+{
+    if (strcmp(input_order, "-rand") == 0)
+        return true;
+
+    if (strcmp(input_order, "-sorted") == 0)
+        return true;
+
+    if (strcmp(input_order, "-nsorted") == 0)
+        return true;
+
+    if (strcmp(input_order, "-rev") == 0)
+        return true;
+
+    return false;
 }
