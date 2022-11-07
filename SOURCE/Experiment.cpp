@@ -38,16 +38,16 @@ void (*SORT_ALGO[11])(int* a, int n, long long &num_Comp) = {SelectionSort, Inse
 void Experiment()
 {
     //The experiment result will be exported to the file "ExperimentResult.txt" in the project directory
-    ofstream fout;
-    fout.open("ExperimentResult.txt");
-    if (fout.is_open())
+    ofstream Efout;
+    Efout.open("ExperimentResult.txt");
+    if (Efout.is_open())
     {
         long long num_Comp; //used to count number of comparison operation used in an algorithm
         
         //for each Data Order
-        for (int DataOrder = 0; DataOrder < 4; DataOrder++)
+        for (int DataOrder = 0; DataOrder < 1; DataOrder++)
         {
-            fout << "\nDATA ORDER: " << getInputOrder(DataOrder) << "\n";
+            Efout << "\nDATA ORDER: " << getInputOrder(DataOrder) << "\n";
             //for each Data Size
             for (int size_id = 0; size_id < 6; size_id++)
             {
@@ -55,7 +55,7 @@ void Experiment()
                 int* dataSet = new int[DATA_SIZE[size_id]];
                 GenerateData(dataSet, DATA_SIZE[size_id], DataOrder);
 
-                fout << "----DATA SIZE: " << DATA_SIZE[size_id] << "\n";
+                Efout << "----DATA SIZE: " << DATA_SIZE[size_id] << "\n";
                 
                 //for each sorting algorithm (11 in total)
                 for (int algo_id = 0; algo_id < 11; algo_id++)
@@ -70,20 +70,20 @@ void Experiment()
                     auto end_time = chrono::high_resolution_clock::now();    
 
                     double run_time_micro = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
-                    double run_time_milli = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
                     
-                    fout << "_________Algorithm: " << getAlgoName(algo_id) << "\n";
-                    fout << "               Runtime (in microseconds): " << fixed << run_time_micro << "\n";
-                    fout << "               Runtime (in milliseconds): " << fixed << run_time_milli << "\n";
-                    fout << "               Comparisons: " << num_Comp << "\n";
+                    Efout << "_________Algorithm: " << getAlgoName(algo_id) << "\n";
+                    Efout << "               Runtime (in microseconds): " << fixed << run_time_micro / 1000 << "\n";
+                    Efout << "               Comparisons: " << num_Comp << "\n";
 
+                    Efout.flush();
                     delete[] a;
                 }
 
                 delete[] dataSet;
             }
         }
-        fout.close();
+
+        Efout.close();
     }
     else
         cout << "Cannot open 'ExperimentResult.txt'.\n";
