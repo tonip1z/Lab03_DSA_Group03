@@ -160,6 +160,19 @@ void Command_1(char* algo_name, char* input_filename, char* output_param)
 
         cout << "\n";
 
+        //Writing results to "output.txt"
+        ofstream fout;
+        fout.open("output.txt");
+        if (fout.is_open())
+        {
+            fout << n << "\n";
+            for (int i = 0; i < n; i++)
+                fout << a[i] << " ";
+
+            fout.close();
+        }
+        else
+            cout << "Cannot open 'output.txt'.\n";
         delete[] a;
         fin.close();
     }
@@ -188,6 +201,20 @@ void Command_2(char* algo_name, int size, char* input_order, char* output_param)
     else if (strcmp(input_order, "-rev") == 0)
         GenerateReverseData(a, size);
     
+    //Write generated data set to "input.txt"
+    ofstream fout;
+    fout.open("input.txt");
+    if (fout.is_open())
+    {
+        fout << size << "\n";
+        for (int i = 0; i < size; i++)
+            fout << a[i] << " ";
+
+        fout.close();
+    }
+    else
+        cout << "Cannot open 'input.txt'.\n";
+
     auto start_time = chrono::high_resolution_clock::now();
     (*SORT_ALGO[algo_id])(a, size, num_Comp);
     auto end_time = chrono::high_resolution_clock::now();
@@ -207,6 +234,19 @@ void Command_2(char* algo_name, int size, char* input_order, char* output_param)
         cout << "Comparisons: " << num_Comp << "\n";
     
     cout << "\n";
+
+    fout.open("output.txt");
+    if (fout.is_open())
+    {
+        fout << size << "\n";
+        for (int i = 0; i < size; i++)
+            fout << a[i] << " ";
+
+        fout.close();
+    }
+    else
+         cout << "Cannot open 'output.txt'.\n";
+
     delete[] a;
 }
 
@@ -295,6 +335,20 @@ void Command_5(char* algo1_name, char* algo2_name, int size, char* input_order)
         GenerateNearlySortedData(dataSet, size);
     else if (strcmp(input_order, "-rev") == 0)
         GenerateReverseData(dataSet, size);
+
+    //Write generated data to "input.txt"
+    ofstream fout;
+    fout.open("input.txt");
+    if (fout.is_open())
+    {
+        fout << size << "\n";
+        for (int i = 0; i < size; i++)
+            fout << dataSet[i] << " ";
+
+        fout.close();
+    }
+    else
+        cout << "Cannot open 'input.txt'.\n";
 
     int* a = copyFromDataSet(dataSet, size);
     int* b = copyFromDataSet(dataSet, size);
@@ -444,6 +498,30 @@ void Command_3_InputOrder(int algo_id, int size, int input_order, char* output_p
 
     GenerateData(a, size, input_order);
     
+    //Write generated data to corresponding files
+    char* wInputTo = new char[12];
+    if (input_order == 0)                   //Input order: Randomized
+        strcpy(wInputTo, "input_1.txt");
+    else if (input_order == 3)              //Input order: Nearly sorted
+        strcpy(wInputTo, "input_2.txt");
+    else if (input_order == 1)              //Input order: Sorted
+        strcpy(wInputTo, "input_3.txt");
+    else if (input_order == 2)              //Input order: Reversely sorted
+        strcpy(wInputTo, "input_4.txt");
+
+    ofstream fout;
+    fout.open(wInputTo);
+    if (fout.is_open())
+    {
+        fout << size << "\n";
+        for (int i = 0; i < size; i++)
+            fout << a[i] << " ";
+
+        fout.close();
+    }
+    else
+        cout << "Cannot open '" << wInputTo << "'.\n";
+
     auto start_time = chrono::high_resolution_clock::now();
     (*SORT_ALGO[algo_id])(a, size, num_Comp);
     auto end_time = chrono::high_resolution_clock::now();
