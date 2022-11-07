@@ -45,7 +45,7 @@ void Experiment()
         long long num_Comp; //used to count number of comparison operation used in an algorithm
         
         //for each Data Order
-        for (int DataOrder = 0; DataOrder < 1; DataOrder++)
+        for (int DataOrder = 1; DataOrder < 2; DataOrder++)
         {
             Efout << "\nDATA ORDER: " << getInputOrder(DataOrder) << "\n";
             //for each Data Size
@@ -70,10 +70,12 @@ void Experiment()
                     auto end_time = chrono::high_resolution_clock::now();    
 
                     double run_time_micro = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+                    double run_time_milli = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
                     
                     Efout << "_________Algorithm: " << getAlgoName(algo_id) << "\n";
-                    Efout << "               Runtime (in microseconds): " << fixed << setprecision(5) << run_time_micro / 1000 << "\n";
-                    Efout << "               Comparisons: " << num_Comp << "\n";
+                    Efout << "               Runtime (in microseconds): " << fixed << setprecision(5) << run_time_micro << "\n";
+                    Efout << "               Runtime (in milliseconds): " << fixed << setprecision(5) << run_time_milli << "\n";
+                    Efout << "               Comparisons: " << num_Comp << "\n";       
 
                     Efout.flush();
                     delete[] a;
@@ -87,6 +89,8 @@ void Experiment()
     }
     else
         cout << "Cannot open 'ExperimentResult.txt'.\n";
+
+    cout << "Experimenting finished!\n";
 }
 
 //This TestAlgorithm() function is used to test the correctness of the implementation for each algorithm 
