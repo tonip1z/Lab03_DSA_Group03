@@ -47,7 +47,7 @@ void Experiment()
         //for each Data Order
         for (int DataOrder = 0; DataOrder < 4; DataOrder++)
         {
-            fout << "\nDATA ORDER: " << getDataOrder(DataOrder) << "\n";
+            fout << "\nDATA ORDER: " << getInputOrder(DataOrder) << "\n";
             //for each Data Size
             for (int size_id = 0; size_id < 6; size_id++)
             {
@@ -223,6 +223,102 @@ void Command_3(char* algo_name, int size, char* output_param)
     Command_3_InputOrder(algo_id, size, 2, output_param); //Input order: Reversely sorted
 }
 
+void Command_4(char* algo1_name, char* algo2_name, char* input_filename)
+{
+    int algo1_id = getAlgoId(algo1_name);
+    int algo2_id = getAlgoId(algo2_name);
+
+    cout << "Algorithm: " << getAlgoName(algo1_id) << " | " << getAlgoName(algo2_id) << "\n";
+    cout << "Input file: " << input_filename << "\n";
+    
+    ifstream fin;
+    fin.open(input_filename);
+    if (fin.is_open())
+    {
+        int n;
+        int* dataSet;
+        long long num_Comp_1, num_Comp_2;
+
+        fin >> n;
+        cout << "Input size: " << n << "\n";
+        cout << "-------------------------\n";
+        dataSet = new int[n];
+
+        for (int i = 0; i < n; i++)
+            fin >> dataSet[i];
+
+        int* a = copyFromDataSet(dataSet, n);
+        int* b = copyFromDataSet(dataSet, n);
+        
+        auto start_time = chrono::high_resolution_clock::now();
+        (*SORT_ALGO[algo1_id])(a, n, num_Comp_1);
+        auto end_time = chrono::high_resolution_clock::now();
+
+        double run_time_1 = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+
+        start_time = chrono::high_resolution_clock::now();
+        (*SORT_ALGO[algo2_id])(b, n, num_Comp_2);
+        end_time = chrono::high_resolution_clock::now();
+
+        double run_time_2 = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+
+        cout << "Running time: " << fixed << setprecision(5) << run_time_1 / 1000 << " ms | " << run_time_2 / 1000 << " ms\n";
+        cout << "Comparisons: " << num_Comp_1 << " | " << num_Comp_2 << "\n";
+
+        delete[] a;
+        delete[] b;
+        delete[] dataSet;
+        fin.close();
+    }
+    else
+        cout << "Cannot open '" << input_filename << "'.\n";
+}
+
+void Command_5(char* algo1_name, char* algo2_name, int size, char* input_order)
+{
+    int algo1_id = getAlgoId(algo1_name);
+    int algo2_id = getAlgoId(algo2_name);
+
+    cout << "Algorithm: " << getAlgoName(algo1_id) << " | " << getAlgoName(algo2_id) << "\n";
+    cout << "Input size: " << size << "\n";
+    cout << "Input order: " << getInputOrder(input_order) << "\n";
+    cout << "-------------------------\n";
+
+    int* dataSet = new int[size];
+    long long num_Comp_1, num_Comp_2;
+
+    if (strcmp(input_order, "-rand") == 0)
+        GenerateRandomData(dataSet, size);
+    else if (strcmp(input_order, "-sorted") == 0)
+        GenerateSortedData(dataSet, size);
+    else if (strcmp(input_order, "-nsorted") == 0)
+        GenerateNearlySortedData(dataSet, size);
+    else if (strcmp(input_order, "-rev") == 0)
+        GenerateReverseData(dataSet, size);
+
+    int* a = copyFromDataSet(dataSet, size);
+    int* b = copyFromDataSet(dataSet, size);
+        
+    auto start_time = chrono::high_resolution_clock::now();
+    (*SORT_ALGO[algo1_id])(a, size, num_Comp_1);
+    auto end_time = chrono::high_resolution_clock::now();
+
+    double run_time_1 = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+
+    start_time = chrono::high_resolution_clock::now();
+    (*SORT_ALGO[algo2_id])(b, size, num_Comp_2);
+    end_time = chrono::high_resolution_clock::now();
+
+    double run_time_2 = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
+
+    cout << "Running time: " << fixed << setprecision(5) << run_time_1 / 1000 << " ms | " << run_time_2 / 1000 << " ms\n";
+    cout << "Comparisons: " << num_Comp_1 << " | " << num_Comp_2 << "\n";
+
+    delete[] a;
+    delete[] b;
+    delete[] dataSet;
+}
+
 //support function for testing/executing command lines
 string getAlgoName(int algo_id)
 {
@@ -263,28 +359,6 @@ string getAlgoName(int algo_id)
             break;
         default:
             return "invalid algo_id";
-            break;
-    }
-}
-
-string getDataOrder(int DataOrder)
-{
-    switch (DataOrder)
-    {
-        case 0:
-            return "Randomized";
-            break;
-        case 1:
-            return "Sorted";
-            break;
-        case 2:
-            return "Reversely sorted";
-            break;
-        case 3:
-            return "Nearly sorted";
-            break;
-        default:
-            return "invalid DataOrder_id";
             break;
     }
 }
@@ -356,6 +430,7 @@ string getInputOrder(int input_order)
 
     if (input_order == 3)
         return "Nearly sorted";
+
     return "invalid input order";
 }
 

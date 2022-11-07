@@ -14,10 +14,11 @@ bool TestAlgorithm(int algo_id);
 void Command_1(char* algo_name, char* input_filename, char* output_param);
 void Command_2(char* algo_name, int size, char* input_order, char* output_param);
 void Command_3(char* algo_name, int size, char* output_param);
+void Command_4(char* algo1_name, char* algo2_name, char* input_filename);
+void Command_5(char* algo1_name, char* algo2_name, int size, char* input_order);
 
 //supporting function prototypes
 string getAlgoName(int algo_id);
-string getDataOrder(int DataOrder);
 int* copyFromDataSet(int* a, int size);
 int getAlgoId(char* algo_name);
 string getInputOrder(char* input_order);
