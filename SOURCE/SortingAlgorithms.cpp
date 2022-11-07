@@ -133,7 +133,7 @@ void HeapSort(int* a, int n, long long &num_Comp)
 // This is a flexible merge sort, can be used to sort all values in array a or part of it, just by changing the range p and q.
 
 //The arguments contain array a (unsorted), array temp to store the answer, begin, pivot, end (of the sorting range).
-// Using the pivot, array has splitted into two runs: the first half and the second half of the original array. 
+// Using the pivot, array a has been splitted into two runs: the first half and the second half of the original array. 
 void MergeRun(int* a, int temp[], int p, int t, int q, long long &num_Comp)     
 {
     int m = 0;      // starting point of array temp
@@ -169,6 +169,10 @@ void MergeRun(int* a, int temp[], int p, int t, int q, long long &num_Comp)
         temp[m] = a[r];
         m++;
     }
+
+    // Print all values from array temp back to array a
+    for (int r = 0; (++num_Comp) && (r < m); r++)
+        a[p + r] = temp[r];
 }
 
 void Sort_on_Run(int* a, int temp[], int p, int q, long long &num_Comp)

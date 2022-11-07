@@ -72,7 +72,7 @@ void Experiment()
                     double run_time_micro = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
                     
                     Efout << "_________Algorithm: " << getAlgoName(algo_id) << "\n";
-                    Efout << "               Runtime (in microseconds): " << fixed << run_time_micro / 1000 << "\n";
+                    Efout << "               Runtime (in microseconds): " << fixed << setprecision(5) << run_time_micro / 1000 << "\n";
                     Efout << "               Comparisons: " << num_Comp << "\n";
 
                     Efout.flush();
