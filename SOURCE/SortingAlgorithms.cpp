@@ -23,6 +23,10 @@ using namespace std;
 //Implementation goes here, write code in corresponding section for each algorithm
 //----------------------------------------------//
 //1. SelectionSort
+// In Selection Sort, we will have an array unsorted or nearly sorted. The idea of this is to find the smallest 
+// value (for the ascended array) or the largest value (for the descended array) and put it into the first position 
+// of the part of the array we need to sort. This process continues until the array is fully sorted.
+
 void SelectionSort(int* a, int n, long long &num_Comp) 
 {
     num_Comp = 0;
@@ -30,7 +34,7 @@ void SelectionSort(int* a, int n, long long &num_Comp)
     {
         int k_min = i;
         for (int j = i + 1; (++num_Comp) && (j < n); j++)
-            if ((++num_Comp) && (a[k_min] > a[j]))
+            if ((++num_Comp) && (a[k_min] > a[j]))      //find the smallest value 
                 k_min = j;
         swap(a[i], a[k_min]);
     }
@@ -42,11 +46,11 @@ void InsertionSort(int* a, int n, long long &num_Comp)
 {
     num_Comp = 0;
 	int i, j, key;
-	for (i = 1; (++num_Comp) && (i < n); i++)
+	for (i = 1; i < n; i++)
 	{
 		key = a[i];
 		j = i - 1;
-		while ((++num_Comp) && (j >= 0) && (++num_Comp) && (a[j] > key)) //if (a[i] > key) is false, still count the comparison itself, although this is compiler dependent
+		while (j >= 0 && a[j] > key)
 		{
 			swap(a[j], a[j + 1]);
 			j = j - 1;
@@ -57,11 +61,12 @@ void InsertionSort(int* a, int n, long long &num_Comp)
 
 //----------------------------------------------//
 //3. BubbleSort
+
 void BubbleSort(int* a, int n, long long &num_Comp)
 {
     num_Comp = 0;
     for (int i = 0; (++num_Comp) && (i < n - 1); i++)
-        for (int j = n - 1; (++num_Comp) && (j > i); j--)
+        for (int j = n - 1; j > i; j--)
             if ((++num_Comp) && (a[j] < a[j - 1]))
                 swap(a[j], a[j - 1]);
 }
@@ -90,14 +95,14 @@ void BubbleSort_with_flag(int* a, int n, long long &num_Comp)
 //4. HeapSort
 void HeapRebuild(int index, int* a, int n, long long &num_Comp)
 {
-	int max = index;
+	int  max = index;
 	int j = 2 * max + 1;
 	int k = 2 * max + 2;
-	if ((++num_Comp) && (j <= n) && (++num_Comp) && (a[max] < a[j]))
+	if (j<=n&&a[max] < a[j])
 		max = j;
-	if ((++num_Comp) && (k <= n) && (++num_Comp) && (a[max] < a[k]))
+	if (k<=n&&a[max] < a[k])
 		max = k;
-	if ((++num_Comp) && (max != index))
+	if (max != index)
 	{
 		swap(a[index], a[max]);
 		HeapRebuild(max, a, n, num_Comp);
@@ -107,7 +112,7 @@ void HeapRebuild(int index, int* a, int n, long long &num_Comp)
 void HeapConstruct(int* a, int n, long long &num_Comp)
 {
 	int index;
-	for(index = n / 2 - 1; (++num_Comp) && (index >= 0); index--)
+	for(index = n / 2 - 1; index >= 0; index--)
 	{
 		HeapRebuild(index, a, n, num_Comp);
 	}
@@ -118,7 +123,7 @@ void HeapSort(int* a, int n, long long &num_Comp)
     num_Comp = 0;
 	HeapConstruct(a, n, num_Comp);
 	int m = n - 1;
-	while ((++num_Comp) && (m > 0))
+	while (m > 0)
 	{
 		swap(a[0], a[m]);
 		m = m - 1;
