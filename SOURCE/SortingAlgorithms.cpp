@@ -230,7 +230,7 @@ void QS_Recursion(int* a, int left, int right, long long &num_Comp)
 
 	int SplitPoint = Partition(a, left, right, num_Comp);
 
-	QS_Recursion(a, left, SplitPoint + 1, num_Comp);
+	QS_Recursion(a, left, SplitPoint - 1, num_Comp);
 	QS_Recursion(a, SplitPoint + 1, right, num_Comp);
 }
 
@@ -238,7 +238,7 @@ void QuickSort(int* a, int n, long long &num_Comp)
 {
     num_Comp = 0;
     //we have to seperate the function itself to match the function pointer format
-    QS_Recursion(a, 0, n, num_Comp);
+    QS_Recursion(a, 0, n - 1, num_Comp);
 }
 
 //----------------------------------------------//
