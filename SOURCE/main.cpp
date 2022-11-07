@@ -1,24 +1,47 @@
 #include <iostream>
+#include <cstring>
 #include "SortingAlgorithms.h"
 #include "DataGenerator.h"
 #include "Experiment.h"
 
 using namespace std;
 
-int main()
+int main(int argc, char** argv)
 {
-	//testing sorting algorithms
-	//if you wanna test your sorting functions do it right here
-	
-	for (int algo_id = 0; algo_id < 11; algo_id++)
+	if (strcmp(argv[1], "-a") == 0)
 	{
-		cout << getAlgoName(algo_id) << ": ";
-		if (TestAlgorithm(algo_id))
-			cout << "PASSED\n";
+		cout << "ALGORITHM MODE\n";
+
+		if (isMeantToBeAlgorithmName(argv[2]))
+		{
+			if (isValidAlgorithmName(argv[2]))
+			{
+				//cout << "Valid algorithm name.\n";
+				
+			}
+			else
+			{
+				cout << "Invalid algorithm name.\n";
+				return 1;
+			}
+		}
 		else
-			cout << "FAILED\n";
+		{
+			cout << "[Algorithm] parameter missing or was entered with the wrong format.\n";
+			return 1;
+		}
 	}
-	
-	Experiment();
+	else if (strcmp(argv[1], "-c") == 0)
+	{
+		cout << "COMPARE MODE\n";
+
+		
+	}
+	else 
+	{
+		cout << "Invalid mode selection.\n";
+		return 1;
+	}
+		
 	return 0;
 }

@@ -91,7 +91,7 @@ void Experiment()
 
 //This TestAlgorithm() function is used to test the correctness of the implementation for each algorithm 
 //(ie. the sort result is in ascending order or not)
-//This test function uses data set of 100 elements
+//This test function uses data set of 100 randomized integers
 //return true if the implementation PASSED the test, otherwise return false - the implementation FAILED the test
 bool TestAlgorithm(int algo_id)
 {
@@ -186,4 +186,79 @@ int* copyFromDataSet(int* a, int size)
         newDataSet[i] = a[i];
 
     return newDataSet;
+}
+
+//the functions below are for the purpose of condition checking with command line arguments
+bool isValidAlgorithmName(char* algo_name)
+{
+    if (strcmp(algo_name, "selection-sort") == 0)
+        return true;
+    if (strcmp(algo_name, "insertion-sort") == 0)
+        return true;
+    if (strcmp(algo_name, "bubble-sort") == 0)
+        return true;
+    if (strcmp(algo_name, "heap-sort") == 0)
+        return true;
+    if (strcmp(algo_name, "merge-sort") == 0)
+        return true;
+    if (strcmp(algo_name, "quick-sort") == 0)
+        return true;
+    if (strcmp(algo_name, "radix-sort") == 0)
+        return true;
+    if (strcmp(algo_name, "shaker-sort") == 0)
+        return true;
+    if (strcmp(algo_name, "shell-sort") == 0)
+        return true;
+    if (strcmp(algo_name, "counting-sort") == 0)
+        return true;
+    if (strcmp(algo_name, "flash-sort") == 0)
+        return true;
+
+    return false;
+}
+
+bool isMeantToBeAlgorithmName(char* algo_name)
+{
+    char* hasSortInString = strstr(algo_name, "-sort");
+
+    if (hasSortInString == NULL)
+        return false;
+    
+    return true;
+}
+
+bool isMeantToBeGivenInputFile(char* filename)
+{
+    return (endingWithdotTxt) && (noIllegalCharacterInFileName);
+}
+
+bool endingWithdotTxt(char* filename)
+{
+    int len = strlen(filename);
+
+    if ((filename[len - 4] == '.') && (filename[len - 3] == 't') && (filename[len - 2] == 'x') && (filename[len - 1] == 't'))
+        return true;
+    
+    return false;
+}
+
+bool noIllegalCharacterInFileName(char* filename)
+{
+    int len = strlen(filename);
+    //illegal character in a file name was refered from: https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file
+    for (int i = 0; i < len - 4; i++)
+        if (filename[i] == '<' || filename[i] == '>' || filename[i] == ':' || int(filename[i]) == 34 /*for double quote " */ || filename[i] == '/' || int(filename[i]) == 92 /*for back slash \ */ || filename[i] == '|' || filename[i] == '?' || filename[i] == '*')
+            return false;
+    
+    return true;
+}
+
+bool isMeantToBeInputSize(char* filename)
+{
+    int len = strlen(filename);
+
+    for (int i = 0; i < len; i++)
+    {
+        
+    }
 }

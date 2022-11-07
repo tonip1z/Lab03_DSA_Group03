@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <cstring>
 
 using namespace std;
 
@@ -12,3 +13,9 @@ bool TestAlgorithm(int algo_id);
 string getAlgoName(int algo_id);
 string getDataOrder(int DataOrder);
 int* copyFromDataSet(int* a, int size);
+//used in main.cpp
+bool isValidAlgorithmName(char* algo_name);
+bool isMeantToBeAlgorithmName(char* algo_name);
+bool isMeantToBeGivenInputFile(char* filename);
+bool endingWithdotTxt(char* filename);
+bool noIllegalCharacterInFileName(char* filename);
