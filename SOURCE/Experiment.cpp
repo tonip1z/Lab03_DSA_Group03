@@ -42,12 +42,13 @@ void Experiment()
     Efout.open("ExperimentResult.txt");
     if (Efout.is_open())
     {
-        long long num_Comp; //used to count number of comparison operation used in an algorithm
+        unsigned long long num_Comp; //used to count number of comparison operation used in an algorithm
         
         //for each Data Order
-        for (int DataOrder = 1; DataOrder < 2; DataOrder++)
+        for (int DataOrder = 0; DataOrder < 4; DataOrder++)
         {
             Efout << "\nDATA ORDER: " << getInputOrder(DataOrder) << "\n";
+            
             //for each Data Size
             for (int size_id = 0; size_id < 6; size_id++)
             {
@@ -89,7 +90,7 @@ void Experiment()
     else
         cout << "Cannot open 'ExperimentResult.txt'.\n";
 
-    cout << "Experimenting finished!\n";
+    cout << "Finished experimenting!\n";
 }
 
 //This TestAlgorithm() function is used to test the correctness of the implementation for each algorithm 
@@ -99,7 +100,7 @@ void Experiment()
 bool TestAlgorithm(int algo_id)
 {
     int* testDataSet = new int[100];
-    long long num_Comp;
+    unsigned long long num_Comp;
     bool PASSED = true;
 
     GenerateRandomData(testDataSet, 100);
@@ -131,7 +132,7 @@ void Command_1(char* algo_name, char* input_filename, char* output_param)
     {
         int n;
         int* a;
-        long long num_Comp;
+        unsigned long long num_Comp;
 
         fin >> n;
         cout << "Input size: " << n << "\n";
@@ -193,7 +194,7 @@ void Command_2(char* algo_name, int size, char* input_order, char* output_param)
     cout << "-------------------------\n";
 
     int* a = new int[size];
-    long long num_Comp;
+    unsigned long long num_Comp;
 
     if (strcmp(input_order, "-rand") == 0)
         GenerateRandomData(a, size);
@@ -280,7 +281,7 @@ void Command_4(char* algo1_name, char* algo2_name, char* input_filename)
     {
         int n;
         int* dataSet;
-        long long num_Comp_1, num_Comp_2;
+        unsigned long long num_Comp_1, num_Comp_2;
 
         fin >> n;
         cout << "Input size: " << n << "\n";
@@ -328,7 +329,7 @@ void Command_5(char* algo1_name, char* algo2_name, int size, char* input_order)
     cout << "-------------------------\n";
 
     int* dataSet = new int[size];
-    long long num_Comp_1, num_Comp_2;
+    unsigned long long num_Comp_1, num_Comp_2;
 
     if (strcmp(input_order, "-rand") == 0)
         GenerateRandomData(dataSet, size);
@@ -497,7 +498,7 @@ void Command_3_InputOrder(int algo_id, int size, int input_order, char* output_p
     cout << "-------------------------\n";
 
     int* a = new int[size];
-    long long num_Comp;
+    unsigned long long num_Comp;
 
     GenerateData(a, size, input_order);
     
@@ -545,6 +546,13 @@ void Command_3_InputOrder(int algo_id, int size, int input_order, char* output_p
     
     cout << "\n";
     delete[] a;
+}
+
+void printArray(int* a, int n)
+{
+    for (int i = 0; i < n; i++) 
+        cout << a[i] << " ";
+    cout << "\n";
 }
 
 //the functions below are for the purpose of condition checking with command line arguments
