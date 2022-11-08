@@ -26,7 +26,6 @@ using namespace std;
 // In Selection Sort, we will have an array unsorted or nearly sorted. The idea of this is to find the smallest 
 // value (for the ascended array) or the largest value (for the descended array) and put it into the first position 
 // of the part of the array we need to sort. This process continues until the array is fully sorted.
-
 void SelectionSort(int* a, int n, unsigned long long &num_Comp) 
 {
     num_Comp = 0;
@@ -42,6 +41,7 @@ void SelectionSort(int* a, int n, unsigned long long &num_Comp)
 
 //----------------------------------------------//
 //2. InsertionSort
+//this implementation was refered from: https://www.geeksforgeeks.org/insertion-sort/
 void InsertionSort(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
@@ -61,6 +61,8 @@ void InsertionSort(int* a, int n, unsigned long long &num_Comp)
 
 //----------------------------------------------//
 //3. BubbleSort
+//The idea for BubbleSort was refered from "A Common-Sense Guide to Data Structures and Algorithms: Level Up Your Core Programming Skills", 2nd edition, by Jay Wengrow, at page 48
+//This is a implementation for that idea, along with another implementation that uses flags
 void BubbleSort(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
@@ -92,6 +94,7 @@ void BubbleSort_with_flag(int* a, int n, unsigned long long &num_Comp)
 
 //----------------------------------------------//
 //4. HeapSort
+//this implementation was refered from: https://www.geeksforgeeks.org/heap-sort/
 void HeapRebuild(int index, int* a, int n, unsigned long long &num_Comp)
 {
 	int max = index;
@@ -133,9 +136,11 @@ void HeapSort(int* a, int n, unsigned long long &num_Comp)
 // Merge Sort with Recursion (using divide and conquer technique).
 // Basically, the sort itself means: Array(Unsorted) = Run1(Unsorted) + Run2(Unsorted) -> Run1(Sorted) + Run2(Sorted) = Array(Sorted) 
 // This is a flexible merge sort, can be used to sort all values in array a or part of it, just by changing the range p and q.
-
-//The arguments contain array a (unsorted), array temp to store the answer, begin, pivot, end (of the sorting range).
+// The arguments contain array a (unsorted), array temp to store the answer, begin, pivot, end (of the sorting range).
 // Using the pivot, array a has been splitted into two runs: the first half and the second half of the original array. 
+
+//This idea was refered in "Giao trinh Cau truc du lieu va Giai thuat" by professor Do Xuan Loi, in the section for Merge Sort (sap xep tron), page 228
+//This implementation was largely inspired by professor Do Xuan Loi as well
 void MergeRun(int* a, int temp[], int p, int t, int q, unsigned long long &num_Comp)     
 {
     int m = 0;      // starting point of array temp
@@ -198,6 +203,10 @@ void MergeSort(int* a, int n, unsigned long long &num_Comp)
 
 //----------------------------------------------//
 //6. QuickSort
+//This implemetation of left-pivot Quick sort was refered in "Algorithms in a Nutshell: A Practical Guide" by George T. Heineman
+//An online version of this book is available on the learning platform O'Reilly
+//A section for Quick Sort can be found here: https://www.oreilly.com/library/view/algorithms-in-a/9780596516246/ch04s04.html?fbclid=IwAR35mN7sHevpsu2UPMkC-4unMsV_Gqar14eALLI63QSAua6GgBxlgU87GEg
+
 int Partition(int* a, int left, int right, unsigned long long &num_Comp) //Return the pivot position while arranging all the elements to their correct sub-array
 {
     int pivot = a[left];
@@ -281,6 +290,7 @@ void RadixSort(int* a, int n, unsigned long long &num_Comp)
 }
 //----------------------------------------------//
 //8. ShakerSort
+//this implementation was inspired by: https://www.geeksforgeeks.org/cocktail-sort/
 void ShakerSort(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
@@ -326,6 +336,7 @@ void ShakerSort(int* a, int n, unsigned long long &num_Comp)
 
 //----------------------------------------------//
 //9. ShellSort
+//the idea for ShellSort was refered from: https://www.geeksforgeeks.org/shellsort/
 void ShellSort(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
@@ -360,6 +371,7 @@ void ShellSort(int* a, int n, unsigned long long &num_Comp)
 
 //----------------------------------------------//
 //10. CountingSort
+//this implementation was inspired by: https://www.geeksforgeeks.org/counting-sort/
 void CountingSort(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
@@ -385,6 +397,9 @@ void CountingSort(int* a, int n, unsigned long long &num_Comp)
 
 //----------------------------------------------//
 //11. FlashSort
+//the idea for FlashSort was refered in the February 1998 "Dr. Dobb's Journal: The Flashsort1 Algorithm" by Karl-Dietrich Neuber 
+//the implementation is largely inspired by him as well
+//Learn more: https://www.drdobbs.com/database/the-flashsort1-algorithm/184410496?fbclid=IwAR3tuwTWh6Tb0tBTyCVGmaPuTuV_0zN3ylDEMwKpBvqB_YG_H3fDxWZBjUo
 void FlashInsertionSort(int* a, int n, unsigned long long &num_Comp)
 {
 	for (int i = 1; (++num_Comp) && (i < n); ++i) 
