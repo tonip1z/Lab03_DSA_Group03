@@ -23,7 +23,7 @@ using namespace std;
 //      SORT_ALGO[10] points to FlashSort()
 
 //Special thanks to Mr. Pham Nguyen Son Tung for introducing us to function pointers
-void (*SORT_ALGO[11])(int* a, int n, long long &num_Comp) = {SelectionSort, InsertionSort, BubbleSort, HeapSort, MergeSort, QuickSort, RadixSort, ShakerSort, ShellSort, CountingSort, FlashSort};
+void (*SORT_ALGO[11])(int* a, int n, unsigned long long &num_Comp) = {SelectionSort, InsertionSort, BubbleSort, HeapSort, MergeSort, QuickSort, RadixSort, ShakerSort, ShellSort, CountingSort, FlashSort};
 
 //DATA_SIZE definition:
 //      DATA_SIZE[0] = 10000
