@@ -1,7 +1,7 @@
 #include <iostream>
 #include "SortingAlgorithms.h"
 
-#define MAX_VAL 1000001 //used in CountingSort
+#define MAX_VAL 500001 //used in CountingSort
 
 using namespace std;
 
