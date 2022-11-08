@@ -1,7 +1,7 @@
 #include <iostream>
 #include "SortingAlgorithms.h"
 
-#define MAX_VAL 100001 //used in CountingSort
+#define MAX_VAL 1000001 //used in CountingSort
 
 using namespace std;
 
@@ -27,7 +27,7 @@ using namespace std;
 // value (for the ascended array) or the largest value (for the descended array) and put it into the first position 
 // of the part of the array we need to sort. This process continues until the array is fully sorted.
 
-void SelectionSort(int* a, int n, long long &num_Comp) 
+void SelectionSort(int* a, int n, unsigned long long &num_Comp) 
 {
     num_Comp = 0;
     for (int i = 0; (++num_Comp) && (i < n - 1); i++)
@@ -42,7 +42,7 @@ void SelectionSort(int* a, int n, long long &num_Comp)
 
 //----------------------------------------------//
 //2. InsertionSort
-void InsertionSort(int* a, int n, long long &num_Comp)
+void InsertionSort(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
 	int i, j, key;
@@ -61,7 +61,7 @@ void InsertionSort(int* a, int n, long long &num_Comp)
 
 //----------------------------------------------//
 //3. BubbleSort
-void BubbleSort(int* a, int n, long long &num_Comp)
+void BubbleSort(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
     for (int i = 0; (++num_Comp) && (i < n - 1); i++)
@@ -70,7 +70,7 @@ void BubbleSort(int* a, int n, long long &num_Comp)
                 swap(a[j], a[j - 1]);
 }
 
-void BubbleSort_with_flag(int* a, int n, long long &num_Comp)
+void BubbleSort_with_flag(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
     int i = 0;
@@ -92,7 +92,7 @@ void BubbleSort_with_flag(int* a, int n, long long &num_Comp)
 
 //----------------------------------------------//
 //4. HeapSort
-void HeapRebuild(int index, int* a, int n, long long &num_Comp)
+void HeapRebuild(int index, int* a, int n, unsigned long long &num_Comp)
 {
 	int max = index;
 	int j = 2 * max + 1;
@@ -108,14 +108,14 @@ void HeapRebuild(int index, int* a, int n, long long &num_Comp)
 	}
 }
 
-void HeapConstruct(int* a, int n, long long &num_Comp)
+void HeapConstruct(int* a, int n, unsigned long long &num_Comp)
 {
 	int index;
 	for (index = n / 2 - 1; (++num_Comp) && (index >= 0); index--)
 		HeapRebuild(index, a, n, num_Comp);
 }
 
-void HeapSort(int* a, int n, long long &num_Comp)
+void HeapSort(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
 	HeapConstruct(a, n, num_Comp);
@@ -136,7 +136,7 @@ void HeapSort(int* a, int n, long long &num_Comp)
 
 //The arguments contain array a (unsorted), array temp to store the answer, begin, pivot, end (of the sorting range).
 // Using the pivot, array a has been splitted into two runs: the first half and the second half of the original array. 
-void MergeRun(int* a, int temp[], int p, int t, int q, long long &num_Comp)     
+void MergeRun(int* a, int temp[], int p, int t, int q, unsigned long long &num_Comp)     
 {
     int m = 0;      // starting point of array temp
     int n = t - 1;    //end point of the first run
@@ -177,18 +177,18 @@ void MergeRun(int* a, int temp[], int p, int t, int q, long long &num_Comp)
         a[p + r] = temp[r];
 }
 
-void Sort_on_Run(int* a, int temp[], int p, int q, long long &num_Comp)
+void Sort_on_Run(int* a, int temp[], int p, int q, unsigned long long &num_Comp)
 {
     if ((++num_Comp) && (p < q))
     {
-        int k = (p + q) / 2; // Choosing pivot at the middle of array a
+        int k = (p + q) / 2; // Split the array into 2
         Sort_on_Run(a, temp, p, k, num_Comp);
         Sort_on_Run(a, temp, k + 1, q, num_Comp);
         MergeRun(a, temp, p, k + 1, q, num_Comp);
     }
 }
 
-void MergeSort(int* a, int n, long long &num_Comp)
+void MergeSort(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
     int* temp = new int[n];
@@ -198,34 +198,25 @@ void MergeSort(int* a, int n, long long &num_Comp)
 
 //----------------------------------------------//
 //6. QuickSort
-int Partition(int* a, int left, int right, long long &num_Comp) //Return the pivot position while arranging all the elements to their correct sub-array
-{			
-	int pivot = a[left];
-	int i = left - 1, j = right;
+int Partition(int* a, int left, int right, unsigned long long &num_Comp) //Return the pivot position while arranging all the elements to their correct sub-array
+{
+    int pivot = a[left];
+    int i = right;
+    
+    for (int j = right; (++num_Comp) && (j > left); j--)
+        if ((++num_Comp) && (a[j] > pivot))
+        {
+            swap(a[i], a[j]);
+            i--;
+        }
 
-	do 
-    {
-        do 
-            ++i;
-		while ((++num_Comp) && (a[i] < pivot));
-        
-        do
-            --j;
-		while ((++num_Comp) && (a[j] > pivot)); 
-        
-		swap(a[i], a[j]);
-	} while ((++num_Comp) && (i < j));
-
-	if ((++num_Comp) && (i > j)) 
-        swap(a[i], a[j]);
-
-	return j;
+    swap(a[i], a[left]);
+    return i;
 }
 
-
-void QS_Recursion(int* a, int left, int right, long long &num_Comp) 
+void QS_Recursion(int* a, int left, int right, unsigned long long &num_Comp) 
 {
-	if ((++num_Comp) && (right - left <= 1))
+	if ((++num_Comp) && (right <= left))
 		return;
 
 	int SplitPoint = Partition(a, left, right, num_Comp);
@@ -234,7 +225,7 @@ void QS_Recursion(int* a, int left, int right, long long &num_Comp)
 	QS_Recursion(a, SplitPoint + 1, right, num_Comp);
 }
 
-void QuickSort(int* a, int n, long long &num_Comp)
+void QuickSort(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
     //we have to seperate the function itself to match the function pointer format
@@ -244,7 +235,7 @@ void QuickSort(int* a, int n, long long &num_Comp)
 //----------------------------------------------//
 //7. RadixSort
 // Least Significant Decimal Radix Sort
-void RadixSort(int* a, int n, long long &num_Comp)
+void RadixSort(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
 
@@ -290,7 +281,7 @@ void RadixSort(int* a, int n, long long &num_Comp)
 }
 //----------------------------------------------//
 //8. ShakerSort
-void ShakerSort(int* a, int n, long long &num_Comp)
+void ShakerSort(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
 
@@ -335,7 +326,7 @@ void ShakerSort(int* a, int n, long long &num_Comp)
 
 //----------------------------------------------//
 //9. ShellSort
-void ShellSort(int* a, int n, long long &num_Comp)
+void ShellSort(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
 
@@ -369,7 +360,7 @@ void ShellSort(int* a, int n, long long &num_Comp)
 
 //----------------------------------------------//
 //10. CountingSort
-void CountingSort(int* a, int n, long long &num_Comp)
+void CountingSort(int* a, int n, unsigned long long &num_Comp)
 {
     num_Comp = 0;
 
@@ -394,7 +385,7 @@ void CountingSort(int* a, int n, long long &num_Comp)
 
 //----------------------------------------------//
 //11. FlashSort
-void FlashInsertionSort(int* a, int n, long long &num_Comp)
+void FlashInsertionSort(int* a, int n, unsigned long long &num_Comp)
 {
 	for (int i = 1; (++num_Comp) && (i < n); ++i) 
     {
@@ -412,12 +403,12 @@ void FlashInsertionSort(int* a, int n, long long &num_Comp)
 	}
 }
 
-int GetClass(int value, int minValue, int maxValue, int m, long long &num_Comp)
+int GetClass(int value, int minValue, int maxValue, int m, unsigned long long &num_Comp)
 {
 	return 1 + ((((long long)(m - 1)) * (value - minValue)) / (maxValue - minValue));
 }
 
-void ClassPermute(int* a, int n, int minValue, int maxValue, int freq[], int m, long long &num_Comp)
+void ClassPermute(int* a, int n, int minValue, int maxValue, int freq[], int m, unsigned long long &num_Comp)
 {
 	int num_Move = 1;
 	int i = 0;
@@ -447,7 +438,7 @@ void ClassPermute(int* a, int n, int minValue, int maxValue, int freq[], int m, 
 	}
 }
 
-void ClassSort(int* a, int n, int freq[], int m, long long &num_Comp)
+void ClassSort(int* a, int n, int freq[], int m, unsigned long long &num_Comp)
 {
 	for (int k = 2; (++num_Comp) && (k <= m); ++k)
 	{
@@ -455,7 +446,7 @@ void ClassSort(int* a, int n, int freq[], int m, long long &num_Comp)
 	}
 }
 
-void Classify(int* a, int n, int& minValue, int& maxValue, int freq[], int m, long long &num_Comp)
+void Classify(int* a, int n, int& minValue, int& maxValue, int freq[], int m, unsigned long long &num_Comp)
 {
 	minValue = a[0];
 	maxValue = a[0];
@@ -476,7 +467,7 @@ void Classify(int* a, int n, int& minValue, int& maxValue, int freq[], int m, lo
 		freq[i] += freq[i - 1];
 }
 
-void FlashSort(int* a, int n, long long &num_Comp)
+void FlashSort(int* a, int n, unsigned long long &num_Comp)
 {
 	num_Comp = 0;
     
