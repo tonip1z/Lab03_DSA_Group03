@@ -9,7 +9,7 @@ using namespace std;
 //Command line argument implementation was refered from: https://www.geeksforgeeks.org/command-line-arguments-in-c-cpp/
 int main(int argc, char** argv)
 {
-	//for a better visualization of how we implemented this code (it's really a mess!), please visit: Command line implementation routing tree in "report.pdf"
+	//for a better visualization of how we implemented this code (it's really a mess!), please visit: Command line implementation tree in "report.pdf"
 	if (strcmp(argv[1], "-a") == 0)
 	{
 		cout << "ALGORITHM MODE\n";
