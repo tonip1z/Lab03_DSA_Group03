@@ -24,6 +24,7 @@ int getAlgoId(char* algo_name);
 string getInputOrder(char* input_order);
 string getInputOrder(int input_order);
 void Command_3_InputOrder(int algo_id, int size, int input_order, char* output_param);
+void printArray(int* a, int n);
 
 //used in main.cpp for condition checking - command line arguments
 bool isValidAlgorithmName(char* algo_name);
